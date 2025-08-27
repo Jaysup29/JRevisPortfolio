@@ -1,2 +1,0 @@
-# JRevisPortfolio
-My Portfolio
