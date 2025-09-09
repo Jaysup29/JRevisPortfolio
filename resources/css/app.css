@@ -8,7 +8,7 @@
   }
   
   .portfolio-card-colored {
-    @apply rounded-2xl shadow-lg p-4 sm:p-6 lg:p-8 transition-all duration-300 hover:shadow-xl hover:scale-105;
+    @apply rounded-2xl shadow-lg p-4 sm:p-6 lg:p-8 transition-all duration-300 hover:shadow-xl hover:scale-95;
   }
   
   .tech-icon {
@@ -133,5 +133,67 @@
   .carousel-wrapper.smooth-scroll {
       animation: none;
       transition: transform 0.5s ease-in-out;
+  }
+
+  /* Custom transition classes for smooth stretching effect */
+  .section-transition {
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .section-enter {
+      opacity: 0;
+      transform: translateY(20px) scale(0.95);
+  }
+
+  .section-enter-active {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+  }
+
+  .section-exit {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+  }
+
+  .section-exit-active {
+      opacity: 0;
+      transform: translateY(-20px) scale(0.95);
+  }
+
+  .portfolio-card-colored {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .portfolio-card-colored:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Custom CSS for your original blue color */
+  .bg-portfolio-blue {
+      background-color: #3b82f6; /* Adjust this to match your exact blue */
+  }
+  
+  /* Smooth transition classes */
+  .section-enter {
+      opacity: 0;
+      transform: translateY(10px);
+  }
+  
+  .section-enter-active {
+      opacity: 1;
+      transform: translateY(0);
+      transition: all 0.4s ease-out;
+  }
+  
+  .section-leave {
+      opacity: 1;
+      transform: translateY(0);
+  }
+  
+  .section-leave-active {
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: all 0.3s ease-in;
   }
 }

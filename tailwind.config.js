@@ -37,7 +37,44 @@ export default {
                 '50%': { transform: 'translateY(-10px)' },
                 },
             },
+            fontFamily: {
+                'sans': ['Inter', 'system-ui', 'sans-serif'],
+            },
+            animation: {
+                'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                'bounce-slow': 'bounce 2s infinite',
+            },
+            backdropBlur: {
+                xs: '2px',
+            },
+            perspective: {
+                '1000': '1000px',
+            },
+            transformStyle: {
+                'preserve-3d': 'preserve-3d',
+            },
+            backfaceVisibility: {
+                'hidden': 'hidden',
+            }
         },
     },
-    plugins: [],
+    plugins: [
+        require('@tailwindcss/forms'),
+        function({ addUtilities }) {
+            addUtilities({
+                '.transform-style-preserve-3d': {
+                'transform-style': 'preserve-3d',
+                },
+                '.backface-hidden': {
+                'backface-visibility': 'hidden',
+                },
+                '.rotate-y-180': {
+                'transform': 'rotateY(180deg)',
+                },
+                '.perspective-1000': {
+                'perspective': '1000px',
+                }
+            })
+        }
+    ],
 }
