@@ -4,6 +4,7 @@ use Livewire\Volt\Component;
 use Illuminate\Support\Collection;
 use App\Models\Skill;
 use App\Models\Project;
+use App\Mail\ContactFormMail;
 
 new class extends Component
 {
@@ -139,6 +140,8 @@ new class extends Component
             'contactForm.message' => 'required|min:10'
         ]);
 
+        Mail::To('jrevis029@gmail.com')->send(new ContactFormMail($this->contactForm));
+        
         // Here you would typically send an email or save to database
         session()->flash('message', 'Thank you for your message! I\'ll get back to you soon.');
         
