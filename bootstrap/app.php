@@ -11,7 +11,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        $middleware->alias([
+            'auth.jwt' => \Tymon\JWTAuth\Http\Middleware\Authenticate::class,
+            'jwt.session' => \App\Http\Middleware\JwtSessionMiddleware::class,
+            'guest.jwt'   => \App\Http\Middleware\GuestJwtMiddleware::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
