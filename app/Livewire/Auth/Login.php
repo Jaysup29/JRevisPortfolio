@@ -3,7 +3,7 @@
 namespace App\Livewire\Auth;
 
 use Livewire\Component;
-use Tymon\JWTAuth\Facades\JWTAuth;
+use App\Services\AuthService;
 use Illuminate\Support\Facades\Http;
 
 class Login extends Component
@@ -11,22 +11,31 @@ class Login extends Component
     public $email = '';
     public $password = '';
 
+    private AuthService $authService;
+
+    public function boot(AuthService $authService)
+    {
+        $this->authService = app(AuthService::class);
+    }
+
+    
     public function login()
     {
         $credentials = [
-            'email' => $this->email,
+            'email'    => $this->email,
             'password' => $this->password,
         ];
 
-        if (!$token = JWTAuth::attempt($credentials)) {
+        $result = $this->authService->attemptLogin($credentials);
+
+        if (! $result) {
             $this->addError('email', 'Invalid credentials.');
             return;
         }
 
-        // Store the token in session for now
-        session(['jwt' => $token]);
+        // Store JWT in session
+        session(['jwt' => $result['access_token']]);
 
-        // ✅ Redirect to dashboard
         return redirect()->route('dashboard');
     }
     

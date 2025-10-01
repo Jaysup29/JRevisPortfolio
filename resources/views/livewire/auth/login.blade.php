@@ -3,17 +3,17 @@
         <div class="w-full max-w-sm bg-white shadow-lg rounded-xl p-6">
             <h2 class="text-2xl font-bold text-center mb-6">Login</h2>
 
-            <form wire:submit.prevent="login">
+            <form method="POST" wire:submit.prevent="login">
                 <div class="mb-4">
                     <label class="block text-sm font-medium mb-1">Email</label>
-                    <input type="email" wire:model="email"
+                    <input type="email" wire:model="email" name="email"
                         class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring focus:border-blue-300">
                     @error('email') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
                 </div>
 
                 <div class="mb-4">
                     <label class="block text-sm font-medium mb-1">Password</label>
-                    <input type="password" wire:model="password"
+                    <input type="password" wire:model="password" name="password"
                         class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring focus:border-blue-300">
                     @error('password') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
                 </div>
@@ -25,5 +25,4 @@
             </form>
         </div>
     </div>
-
 </div>
