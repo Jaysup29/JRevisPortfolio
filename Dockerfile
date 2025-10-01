@@ -24,8 +24,8 @@ RUN composer install --no-dev --optimize-autoloader
 # Install frontend dependencies (Vite)
 RUN npm install && npm run build
 
-# ✅ Move Vite build output into Laravel public/build
-RUN rm -rf public/build && mv dist public/build
+# Verify build output
+RUN ls -la public/build
 
 # Permissions for Laravel
 RUN chown -R www-data:www-data storage bootstrap/cache \
@@ -34,9 +34,6 @@ RUN chown -R www-data:www-data storage bootstrap/cache \
 # Configure Apache to serve Laravel from /public
 RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf \
     && sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/apache2.conf
-
-# Debug: list the build files (so you can confirm in Render logs)
-RUN ls -la public/build
 
 # Expose port 80
 EXPOSE 80
