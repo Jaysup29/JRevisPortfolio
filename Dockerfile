@@ -25,6 +25,9 @@ RUN composer install --no-dev --optimize-autoloader
 RUN npm install && npm run build && \
     ls -la public/build || (echo "❌ Vite build failed: public/build not found" && exit 1)
 
+# Make sure build exists
+RUN test -f public/build/manifest.json || (echo "❌ manifest.json missing" && exit 1)
+
 # Permissions for Laravel
 RUN chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
