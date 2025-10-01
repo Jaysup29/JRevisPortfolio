@@ -37,6 +37,9 @@ COPY postcss.config.js ./
 # Copy resources folder for Vite build
 COPY resources ./resources
 
+# Copy public directory (needed for Vite output)
+COPY public ./public
+
 # Build frontend assets
 RUN npm run build
 
