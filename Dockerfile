@@ -21,8 +21,6 @@ COPY . .
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
-php artisan key:generate --force
-
 php artisan migrate --force
 
 # Install frontend dependencies (Vite)
