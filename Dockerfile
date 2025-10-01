@@ -18,10 +18,6 @@ COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
 # Copy app files
 COPY . .
 
-# Point Apache to /public
-RUN rm -rf /var/www/html && ln -s /var/www/html/public /var/www/html
-
-
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
@@ -31,6 +27,9 @@ RUN npm install && npm run build
 # Permissions for Laravel
 RUN chown -R www-data:www-data storage bootstrap/cache
 RUN chmod -R 775 storage bootstrap/cache
+
+# Point Apache to /public
+RUN rm -rf /var/www/html && ln -s /var/www/html/public /var/www/html
 
 # Expose port
 EXPOSE 80
