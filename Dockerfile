@@ -1,30 +1,9 @@
-# -------------------------
-# Stage 1: Node build stage
-# -------------------------
-FROM node:20 AS node-build
-
-WORKDIR /app
-
-# Copy only package files first for caching
-COPY package*.json vite.config.js ./
-
-RUN npm install
-
-# Copy full app to run vite build
-COPY . .
-
-# Build frontend assets into public/build
-RUN npm run build
-
-
-# -------------------------
-# Stage 2: PHP + Apache stage
-# -------------------------
+# Use PHP with Apache
 FROM php:8.2-apache
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
-    git curl libpq-dev zip unzip \
+    git curl libpq-dev zip unzip nodejs npm \
     && docker-php-ext-install pdo pdo_pgsql
 
 # Enable Apache mod_rewrite
@@ -36,16 +15,17 @@ WORKDIR /var/www/html
 # Copy composer
 COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
 
-# Copy Laravel app
+# Copy app files
 COPY . .
 
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
-# Copy built Vite assets from Node stage
-COPY --from=node-build /app/public/build ./public/build
+# Install frontend dependencies & build assets
+RUN npm install && npm run build && \
+    ls -la public/build || (echo "❌ Vite build failed: public/build not found" && exit 1)
 
-# Fix permissions for Laravel
+# Permissions for Laravel
 RUN chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
