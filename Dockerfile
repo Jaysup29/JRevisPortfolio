@@ -40,13 +40,30 @@ COPY resources ./resources
 # Copy public directory (needed for Vite output)
 COPY public ./public
 
-# Build frontend assets
-RUN npm run build
+# Debug: Check what we have before build
+RUN echo "========== BEFORE BUILD ==========" && \
+    echo "Current directory:" && pwd && \
+    echo "Files in root:" && ls -la && \
+    echo "Public directory:" && ls -la public/ && \
+    echo "Node version:" && node --version && \
+    echo "NPM version:" && npm --version && \
+    echo "Package.json scripts:" && cat package.json | grep -A 10 "scripts" && \
+    echo "================================="
 
-# Verify build was successful
-RUN ls -la public/build && \
-    test -f public/build/manifest.json || \
-    (echo "❌ Vite build failed: manifest.json not found" && exit 1)
+# Build frontend assets with verbose output
+RUN echo "========== RUNNING BUILD ==========" && \
+    npm run build 2>&1 | tee build.log && \
+    BUILD_EXIT_CODE=${PIPESTATUS[0]} && \
+    echo "Build exit code: $BUILD_EXIT_CODE" && \
+    echo "=================================" && \
+    echo "========== AFTER BUILD ==========" && \
+    echo "Public directory:" && ls -la public/ && \
+    echo "Public/build directory:" && ls -la public/build/ || echo "public/build does not exist!" && \
+    echo "Manifest check:" && \
+    (test -f public/build/manifest.json && echo "✅ manifest.json exists" && cat public/build/manifest.json || echo "❌ manifest.json NOT found") && \
+    echo "Build log:" && cat build.log && \
+    echo "=================================" && \
+    test -f public/build/manifest.json || (echo "❌ FATAL: manifest.json not found after build" && exit 1)
 
 # Now copy the rest of the application
 COPY . .
