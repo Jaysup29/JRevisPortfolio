@@ -25,13 +25,14 @@ RUN composer install --no-dev --optimize-autoloader
 RUN npm install && npm run build
 
 # Permissions for Laravel
-RUN chown -R www-data:www-data storage bootstrap/cache
-RUN chmod -R 775 storage bootstrap/cache
+RUN chown -R www-data:www-data storage bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache
 
-# Point Apache to /public
-RUN rm -rf /var/www/html && ln -s /var/www/html/public /var/www/html
+# Configure Apache to serve Laravel from /public
+RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf \
+    && sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/apache2.conf
 
-# Expose port
+# Expose port 80
 EXPOSE 80
 
 # Start Apache
