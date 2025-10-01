@@ -10,6 +10,7 @@ export default defineConfig({
         }),
     ],
     build: {
-        outDir: 'dist'
-    }
+        outDir: 'public/build',   // 👈 ensures Laravel finds manifest.json
+        emptyOutDir: true,
+    },
 });
