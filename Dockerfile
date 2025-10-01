@@ -26,8 +26,8 @@ COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
 # Copy package files for npm
 COPY package*.json ./
 
-# Install frontend dependencies
-RUN npm ci --only=production
+# Install frontend dependencies (including dev dependencies for build)
+RUN npm ci
 
 # Copy configuration files needed for Vite build
 COPY vite.config.js ./
