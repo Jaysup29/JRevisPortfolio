@@ -12,7 +12,7 @@ RUN a2enmod rewrite
 # Set working directory
 WORKDIR /var/www/html
 
-# Copy composer
+# Copy Composer
 COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
 
 # Copy app files
@@ -21,11 +21,11 @@ COPY . .
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader
 
-# Install frontend dependencies (Vite)
+# Install frontend dependencies and build Vite assets
 RUN npm install && npm run build
 
-# Verify build output
-RUN ls -la public/build
+# Debug: confirm build output (manifest.json must exist)
+RUN ls -R public/build
 
 # Permissions for Laravel
 RUN chown -R www-data:www-data storage bootstrap/cache \
