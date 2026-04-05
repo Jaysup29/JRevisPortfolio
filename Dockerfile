@@ -9,9 +9,13 @@ RUN apt-get update && apt-get install -y \
     libsqlite3-dev \
     zip \
     unzip \
-    nodejs \
-    npm \
     && docker-php-ext-install pdo pdo_sqlite pdo_pgsql \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Node.js 20 (Debian default is too old for Vite)
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -27,18 +31,21 @@ COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
 # Copy all application files
 COPY . .
 
+# Create .env before any artisan commands
+RUN cp .env.example .env
+
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 # Install frontend dependencies and build assets
-RUN npm ci && npm run build
+RUN npm ci && npm run build \
+    && ls -la public/build/manifest.json
 
-# Create SQLite database and .env file
-RUN touch database/database.sqlite \
-    && cp .env.example .env
+# Create SQLite database
+RUN touch database/database.sqlite
 
 # Ensure directories exist before setting permissions
-RUN mkdir -p storage/logs storage/framework/cache storage/framework/sessions storage/framework/views bootstrap/cache public/build
+RUN mkdir -p storage/logs storage/framework/cache storage/framework/sessions storage/framework/views bootstrap/cache
 
 # Set permissions for Laravel
 RUN chown -R www-data:www-data \
