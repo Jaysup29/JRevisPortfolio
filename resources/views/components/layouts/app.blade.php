@@ -39,8 +39,23 @@
     <!-- Dark mode + background applied before paint -->
     <script>
         (function() {
-            var isDark = localStorage.getItem('darkMode') === 'true' ||
-                (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            // Auto dark mode: 6PM-6AM Manila time, unless user manually toggled
+            function isManilaNight() {
+                var now = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Manila' }));
+                var hour = now.getHours();
+                return hour >= 18 || hour < 6;
+            }
+
+            var userPref = localStorage.getItem('darkMode');
+            var isDark;
+            if (userPref !== null) {
+                // User manually set a preference — respect it
+                isDark = userPref === 'true';
+            } else {
+                // No manual preference — auto based on Manila time
+                isDark = isManilaNight();
+            }
+
             if (isDark) {
                 document.documentElement.classList.add('dark');
             }

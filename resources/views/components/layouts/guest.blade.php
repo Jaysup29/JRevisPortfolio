@@ -39,16 +39,27 @@
     <!-- Dark mode applied before paint to prevent flash -->
     <script>
         (function() {
-            var isDark = localStorage.getItem('darkMode') === 'true' ||
-                (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            // Auto dark mode: 6PM-6AM Manila time, unless user manually toggled
+            function isManilaNight() {
+                var now = new Date(new Date().toLocaleString('en-US', { timeZone: 'Asia/Manila' }));
+                var hour = now.getHours();
+                return hour >= 18 || hour < 6;
+            }
+
+            var userPref = localStorage.getItem('darkMode');
+            var isDark;
+            if (userPref !== null) {
+                isDark = userPref === 'true';
+            } else {
+                isDark = isManilaNight();
+            }
+
             if (isDark) {
                 document.documentElement.classList.add('dark');
             }
-            // Inject background style immediately - no flash
             var s = document.createElement('style');
             s.textContent = 'html, body { background-color: ' + (isDark ? '#0a0a14' : '#f0f1f5') + ' !important; }';
             document.head.appendChild(s);
-            // Store reference so toggleDarkMode can update it
             window.__bgStyle = s;
         })();
     </script>

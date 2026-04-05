@@ -67,11 +67,16 @@ window.addEventListener('orientationchange', function() {
     }, 100);
 });
 
-// Cursor spotlight - follows mouse across page
+// Cursor spotlight - follows mouse across page (RAF throttled)
+let spotlightRAF = null;
 document.addEventListener('mousemove', (e) => {
-    const spotlight = document.getElementById('cursorSpotlight');
-    if (spotlight) {
-        spotlight.style.left = e.clientX + 'px';
-        spotlight.style.top = e.clientY + 'px';
-    }
+    if (spotlightRAF) return;
+    spotlightRAF = requestAnimationFrame(() => {
+        const spotlight = document.getElementById('cursorSpotlight');
+        if (spotlight) {
+            spotlight.style.left = e.clientX + 'px';
+            spotlight.style.top = e.clientY + 'px';
+        }
+        spotlightRAF = null;
+    });
 });
