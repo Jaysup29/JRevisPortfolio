@@ -166,7 +166,7 @@ new class extends Component
         <div class="mobile-grid">
             
             <!-- Main Hero Section -->
-            <div class="lg:row-span-1 lg:row-start-1 sm:col-span-2 lg:col-span-2">
+            <div id="section-home" class="lg:row-span-1 lg:row-start-1 sm:col-span-2 lg:col-span-2">
                 <div class="portfolio-card-colored bg-portfolio-dark dark:bg-gray-800 text-white h-full min-h-[300px] sm:min-h-[400px] relative overflow-hidden">
                     <div class="relative z-10 h-full flex flex-col justify-center">
                         <h1 class="mobile-hero-title font-bold mb-2 sm:mb-4 leading-tight">
@@ -202,7 +202,8 @@ new class extends Component
             </div>
 
             <!-- About Me Section -->
-            <div 
+            <div
+                id="section-about"
                 x-data="{
                     current: 0, 
                     isTransitioning: false,
@@ -248,7 +249,7 @@ new class extends Component
                 x-init="startAutoRotate()"
                 @mouseenter="stopAutoRotate()" 
                 @mouseleave="startAutoRotate()"
-                class="relative lg:row-span-1 lg:row-start-1 lg:row-end-3 portfolio-card-colored bg-portfolio-blue dark:bg-blue-600 text-white min-h-[300px] sm:min-h-[400px] flex items-center justify-center"
+                class="relative lg:row-span-1 lg:row-start-1 lg:row-end-3 portfolio-card-colored bg-portfolio-blue dark:bg-blue-600 text-white min-h-[480px] sm:min-h-[400px] flex items-center justify-center"
             >
                 <div class="h-full flex flex-col p-4 sm:p-6 relative w-full">
                     <div class="text-center mb-6">
@@ -257,71 +258,68 @@ new class extends Component
                     </div>
 
                     <!-- Content Container with Fixed Height -->
-                    <div class="flex-1 relative mb-20">
+                    <div class="flex-1 relative pb-14 sm:pb-16 min-h-[200px] sm:min-h-[280px]">
                         <!-- Professional Journey -->
-                        <div 
-                            x-show="sections[current].key === 'journey'" 
-                            x-transition.opacity.duration.500ms
-                            class="absolute inset-0"
+                        <div
+                            class="absolute inset-0 pb-14 sm:pb-16 transition-opacity duration-300 ease-in-out"
+                            :class="sections[current].key === 'journey' ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'"
                         >
                             <h3 class="text-xl font-semibold mb-3 flex items-center gap-2">
                                 <span class="text-2xl">👨‍💻</span>
                                 Professional Journey
                             </h3>
                             <p class="text-blue-100 dark:text-blue-200 leading-relaxed text-sm sm:text-base wrap-break-word">
-                                With over 5 years of experience in web development, I specialize in creating dynamic, 
-                                user-friendly applications that solve real-world problems. My passion lies in crafting 
+                                With over 5 years of experience in web development, I specialize in creating dynamic,
+                                user-friendly applications that solve real-world problems. My passion lies in crafting
                                 clean, maintainable code and delivering exceptional user experiences.
                             </p>
                         </div>
 
                         <!-- Core Expertise -->
-                        <div 
-                            x-show="sections[current].key === 'expertise'" 
-                            x-transition.opacity.duration.500ms
-                            class="absolute inset-0"
+                        <div
+                            class="absolute inset-0 pb-14 sm:pb-16 transition-opacity duration-300 ease-in-out"
+                            :class="sections[current].key === 'expertise' ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'"
                         >
                             <h3 class="text-xl font-semibold mb-4 flex items-center gap-2">
                                 <span class="text-2xl">🚀</span>
                                 Core Expertise
                             </h3>
-                            <div class="grid grid-cols-2 sm:grid-cols-2 gap-3">
-                                <div class="bg-blue-700 dark:bg-blue-800 bg-opacity-50 rounded-lg p-3">
-                                    <div class="flex items-center gap-2 mb-2">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4">
+                                <div class="bg-blue-700 dark:bg-blue-800 bg-opacity-50 rounded-lg p-2 sm:p-4">
+                                    <div class="flex items-center gap-2 mb-1 sm:mb-2">
                                         <span class="text-lg">🔧</span>
-                                        <span class="font-semibold">Backend Development</span>
+                                        <span class="font-semibold text-sm sm:text-base">Backend Development</span>
                                     </div>
-                                    <p class="text-blue-200 text-sm">PHP, Laravel, MySQL, API Development</p>
+                                    <p class="text-blue-200 text-xs sm:text-sm">PHP, Laravel, MySQL, API Development</p>
                                 </div>
-                                <div class="bg-blue-700 dark:bg-blue-800 bg-opacity-50 rounded-lg p-3">
-                                    <div class="flex items-center gap-2 mb-2">
+                                <div class="bg-blue-700 dark:bg-blue-800 bg-opacity-50 rounded-lg p-2 sm:p-4">
+                                    <div class="flex items-center gap-2 mb-1 sm:mb-2">
                                         <span class="text-lg">🎨</span>
-                                        <span class="font-semibold">Frontend Development</span>
+                                        <span class="font-semibold text-sm sm:text-base">Frontend Development</span>
                                     </div>
-                                    <p class="text-blue-200 text-sm">Livewire, JavaScript, Tailwind CSS, Alpine.js</p>
+                                    <p class="text-blue-200 text-xs sm:text-sm">Livewire, JavaScript, Tailwind CSS, Alpine.js</p>
                                 </div>
-                                <div class="bg-blue-700 dark:bg-blue-800 bg-opacity-50 rounded-lg p-3">
-                                    <div class="flex items-center gap-2 mb-2">
+                                <div class="bg-blue-700 dark:bg-blue-800 bg-opacity-50 rounded-lg p-2 sm:p-4">
+                                    <div class="flex items-center gap-2 mb-1 sm:mb-2">
                                         <span class="text-lg">☁️</span>
-                                        <span class="font-semibold">Cloud & DevOps</span>
+                                        <span class="font-semibold text-sm sm:text-base">Cloud & DevOps</span>
                                     </div>
-                                    <p class="text-blue-200 text-sm">AWS, Docker, Git, CI/CD Pipelines</p>
+                                    <p class="text-blue-200 text-xs sm:text-sm">AWS, Docker, Git, CI/CD Pipelines</p>
                                 </div>
-                                <div class="bg-blue-700 dark:bg-blue-800 bg-opacity-50 rounded-lg p-3">
-                                    <div class="flex items-center gap-2 mb-2">
+                                <div class="bg-blue-700 dark:bg-blue-800 bg-opacity-50 rounded-lg p-2 sm:p-4">
+                                    <div class="flex items-center gap-2 mb-1 sm:mb-2">
                                         <span class="text-lg">📱</span>
-                                        <span class="font-semibold">Modern Development</span>
+                                        <span class="font-semibold text-sm sm:text-base">Modern Development</span>
                                     </div>
-                                    <p class="text-blue-200 text-sm">Responsive Design, PWAs, Performance Optimization</p>
+                                    <p class="text-blue-200 text-xs sm:text-sm">Responsive Design, PWAs, Performance Optimization</p>
                                 </div>
                             </div>
                         </div>
 
                         <!-- What Drives Me -->
-                        <div 
-                            x-show="sections[current].key === 'values'" 
-                            x-transition.opacity.duration.500ms
-                            class="absolute inset-0"
+                        <div
+                            class="absolute inset-0 pb-14 sm:pb-16 transition-opacity duration-300 ease-in-out"
+                            :class="sections[current].key === 'values' ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'"
                         >
                             <h3 class="text-xl font-semibold mb-4 flex items-center gap-2">
                                 <span class="text-2xl">💡</span>
@@ -354,21 +352,21 @@ new class extends Component
                     </div>
 
                     <!-- Navigation Controls -->
-                    <div class="absolute bottom-4 left-0 right-0 flex justify-between items-center px-6 gap-4">
+                    <div class="absolute bottom-2 sm:bottom-4 left-0 right-0 flex justify-between items-center px-3 sm:px-6 gap-2 sm:gap-4">
                         <!-- Previous Button -->
-                        <button 
+                        <button
                             @click="goToPrev()"
                             :disabled="isTransitioning"
-                            class="px-4 py-2 bg-blue-500 hover:bg-blue-400 disabled:opacity-50 disabled:cursor-not-allowed rounded-full text-sm/6 shadow-lg text-nowrap capitalize transition-all duration-200"
+                            class="px-3 sm:px-4 py-1.5 sm:py-2 bg-blue-500 hover:bg-blue-400 disabled:opacity-50 disabled:cursor-not-allowed rounded-full text-xs sm:text-sm shadow-lg text-nowrap capitalize transition-all duration-200"
                         >
                             ← <span x-text="sections[(current - 1 + sections.length) % sections.length].key"></span>
                         </button>
 
                         <!-- Next Button -->
-                        <button 
+                        <button
                             @click="goToNext()"
                             :disabled="isTransitioning"
-                            class="px-4 py-2 bg-blue-500 hover:bg-blue-400 disabled:opacity-50 disabled:cursor-not-allowed rounded-full text-sm/6 shadow-lg text-nowrap capitalize transition-all duration-200"
+                            class="px-3 sm:px-4 py-1.5 sm:py-2 bg-blue-500 hover:bg-blue-400 disabled:opacity-50 disabled:cursor-not-allowed rounded-full text-xs sm:text-sm shadow-lg text-nowrap capitalize transition-all duration-200"
                         >
                             <span x-text="sections[(current + 1) % sections.length].key"></span> →
                         </button>
@@ -377,7 +375,7 @@ new class extends Component
             </div>
             
             <!-- Technology Stack -->
-            <div class="sm:col-span-2 lg:col-span-2 lg:row-span-1 lg:row-start-2">
+            <div class="sm:col-span-2 lg:col-span-2 lg:row-span-1 lg:row-start-2 overflow-hidden rounded-2xl">
                 <div class="carousel-container relative overflow-hidden">
                     <!-- Navigation Buttons -->
                     <button class="absolute top-1/2 left-2 transform -translate-y-1/2 bg-black bg-opacity-30 hover:bg-opacity-50 text-white p-2 rounded-full transition-all duration-300 z-10" id="prevBtn">
@@ -424,7 +422,7 @@ new class extends Component
             </div>
 
             <!-- Contact Section -->
-            <div class=" lg:row-start-3 lg:row-end-5 portfolio-card-colored bg-portfolio-green dark:bg-green-600 text-white min-h-[250px] sm:min-h-[300px] flex items-center justify-center">
+            <div id="section-contact" class=" lg:row-start-3 lg:row-end-5 portfolio-card-colored bg-portfolio-green dark:bg-green-600 text-white min-h-[250px] sm:min-h-[300px] flex items-center justify-center">
                 <div class="h-full flex flex-col p-4 sm:p-6">
                     <div class="text-center mb-6">
                         <h3 class="text-3xl sm:text-4xl font-bold mb-2">LET'S CONNECT</h3>
@@ -553,16 +551,16 @@ new class extends Component
             </div>
 
             <!-- Projects Section -->
-            <div class="lg:row-start-3 lg:row-end-4 sm:col-span-2 lg:col-span-2 portfolio-card-colored bg-portfolio-red dark:bg-red-600 text-white min-h-[300px]">
+            <div id="section-projects" class="lg:row-start-3 lg:row-end-4 sm:col-span-2 lg:col-span-2 portfolio-card-colored bg-portfolio-red dark:bg-red-600 text-white min-h-[300px]">
                 <div class="h-full flex flex-col">
                     <h3 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6 sm:mb-8 text-center">PROJECTS</h3>
                     
-                    <div class="flex-1 space-y-4 sm:space-y-6 overflow-y-auto max-h-60 sm:max-h-80">
+                    <div class="flex-1 space-y-4 sm:space-y-6 overflow-y-auto max-h-72 sm:max-h-80">
                         @foreach($projects as $index => $project)
                         <div class="bg-red-600 dark:bg-red-700 bg-opacity-50 dark:bg-opacity-50 rounded-lg p-3 sm:p-4 hover:bg-opacity-70 dark:hover:bg-opacity-70 transition-all cursor-pointer">
                             <div class="flex justify-between items-start mb-2">
                                 <div class="flex items-center gap-3">
-                                    <span class=""><img class="w-[50px] h-[50px]" src="{{ asset($project['image'] ? $project['image'] : 'default_logo.png') }}" /></span>
+                                    <span class=""><img class="w-8 h-8 sm:w-[50px] sm:h-[50px]" src="{{ asset($project['image'] ? $project['image'] : 'default_logo.png') }}" /></span>
                                     <h4 class="font-bold text-sm sm:text-base lg:text-lg">{{ $project['title'] }} ({{ $project['acronym'] }})</h4>
                                 </div>
                                 <span class="text-xs bg-red-800 dark:bg-red-900 px-2 py-1 rounded flex-shrink-0 capitalize">{{ $project['project_status'] }}</span>
@@ -629,24 +627,39 @@ new class extends Component
         </div>
 
         <!-- Mobile Navigation Bar (Sticky Bottom) -->
-        <div class="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 z-40 sm:hidden">
-            <div class="grid grid-cols-4 py-2">
-                <button wire:click="setActiveSection('home')" class="flex flex-col items-center py-2 px-1 text-gray-600 dark:text-gray-400 hover:text-portfolio-blue dark:hover:text-blue-400 transition-colors">
-                    <span class="text-lg">🏠</span>
-                    <span class="text-xs">Home</span>
-                </button>
-                <button wire:click="setActiveSection('about')" class="flex flex-col items-center py-2 px-1 text-gray-600 dark:text-gray-400 hover:text-portfolio-blue dark:hover:text-blue-400 transition-colors">
-                    <span class="text-lg">👨‍💻</span>
-                    <span class="text-xs">About</span>
-                </button>
-                <button wire:click="setActiveSection('projects')" class="flex flex-col items-center py-2 px-1 text-gray-600 dark:text-gray-400 hover:text-portfolio-blue dark:hover:text-blue-400 transition-colors">
-                    <span class="text-lg">🚀</span>
-                    <span class="text-xs">Projects</span>
-                </button>
-                <button wire:click="setActiveSection('contact')" class="flex flex-col items-center py-2 px-1 text-gray-600 dark:text-gray-400 hover:text-portfolio-blue dark:hover:text-blue-400 transition-colors">
-                    <span class="text-lg">📧</span>
-                    <span class="text-xs">Contact</span>
-                </button>
+        <div
+            x-data="{
+                activeNav: 'home',
+                scrollTo(section) {
+                    this.activeNav = section;
+                    const el = document.getElementById('section-' + section);
+                    if (el) {
+                        const offset = el.getBoundingClientRect().top + window.scrollY - 16;
+                        window.scrollTo({ top: offset, behavior: 'smooth' });
+                    }
+                }
+            }"
+            class="fixed bottom-0 left-0 right-0 z-40 sm:hidden"
+        >
+            <div class="mx-3 mb-2 bg-gray-900/90 dark:bg-gray-800/90 backdrop-blur-lg rounded-2xl shadow-2xl border border-gray-700/50 dark:border-gray-600/50">
+                <div class="grid grid-cols-4 py-1.5 px-2">
+                    <button @click="scrollTo('home')" class="group flex flex-col items-center py-2 px-1 rounded-xl transition-all duration-200" :class="activeNav === 'home' ? 'bg-portfolio-blue/20' : ''">
+                        <span class="text-lg transition-transform duration-200 group-active:scale-90" :class="activeNav === 'home' ? 'scale-110' : ''">🏠</span>
+                        <span class="text-[10px] font-medium mt-0.5 transition-colors" :class="activeNav === 'home' ? 'text-portfolio-blue dark:text-blue-400' : 'text-gray-400'">Home</span>
+                    </button>
+                    <button @click="scrollTo('about')" class="group flex flex-col items-center py-2 px-1 rounded-xl transition-all duration-200" :class="activeNav === 'about' ? 'bg-portfolio-blue/20' : ''">
+                        <span class="text-lg transition-transform duration-200 group-active:scale-90" :class="activeNav === 'about' ? 'scale-110' : ''">👨‍💻</span>
+                        <span class="text-[10px] font-medium mt-0.5 transition-colors" :class="activeNav === 'about' ? 'text-portfolio-blue dark:text-blue-400' : 'text-gray-400'">About</span>
+                    </button>
+                    <button @click="scrollTo('projects')" class="group flex flex-col items-center py-2 px-1 rounded-xl transition-all duration-200" :class="activeNav === 'projects' ? 'bg-portfolio-blue/20' : ''">
+                        <span class="text-lg transition-transform duration-200 group-active:scale-90" :class="activeNav === 'projects' ? 'scale-110' : ''">🚀</span>
+                        <span class="text-[10px] font-medium mt-0.5 transition-colors" :class="activeNav === 'projects' ? 'text-portfolio-blue dark:text-blue-400' : 'text-gray-400'">Projects</span>
+                    </button>
+                    <button @click="scrollTo('contact')" class="group flex flex-col items-center py-2 px-1 rounded-xl transition-all duration-200" :class="activeNav === 'contact' ? 'bg-portfolio-blue/20' : ''">
+                        <span class="text-lg transition-transform duration-200 group-active:scale-90" :class="activeNav === 'contact' ? 'scale-110' : ''">📧</span>
+                        <span class="text-[10px] font-medium mt-0.5 transition-colors" :class="activeNav === 'contact' ? 'text-portfolio-blue dark:text-blue-400' : 'text-gray-400'">Contact</span>
+                    </button>
+                </div>
             </div>
         </div>
 
