@@ -166,7 +166,7 @@ new class extends Component
         <div class="mobile-grid">
             
             <!-- Main Hero Section -->
-            <div id="section-home" class="lg:row-span-1 lg:row-start-1 md:col-span-2 lg:col-span-2">
+            <div id="section-home" class="lg:row-span-1 lg:row-start-1 md:col-span-2 lg:col-span-2 scroll-reveal" data-reveal-delay="0">
                 <div class="portfolio-card-colored bg-portfolio-dark dark:bg-gray-800 text-white h-full min-h-[300px] sm:min-h-[400px] relative overflow-hidden">
                     <div class="tile-glow" id="glow-hero"></div>
                     <div class="relative z-10 h-full flex flex-col justify-center">
@@ -250,7 +250,8 @@ new class extends Component
                 x-init="startAutoRotate()"
                 @mouseenter="stopAutoRotate()" 
                 @mouseleave="startAutoRotate()"
-                class="relative lg:row-span-1 lg:row-start-1 lg:row-end-3 portfolio-card-colored bg-portfolio-blue dark:bg-blue-600 text-white min-h-[480px] sm:min-h-[400px] lg:min-h-[500px] flex items-center justify-center"
+                class="relative lg:row-span-1 lg:row-start-1 lg:row-end-3 portfolio-card-colored bg-portfolio-blue dark:bg-blue-600 text-white min-h-[480px] sm:min-h-[400px] lg:min-h-[500px] flex items-center justify-center scroll-reveal"
+                data-reveal-delay="100"
             >
                 <div class="tile-glow tile-glow-white" id="glow-about"></div>
                 <div class="h-full flex flex-col p-4 sm:p-6 relative w-full">
@@ -377,7 +378,7 @@ new class extends Component
             </div>
             
             <!-- Technology Stack -->
-            <div class="md:col-span-2 lg:col-span-2 lg:row-span-1 lg:row-start-2 overflow-hidden rounded-2xl">
+            <div class="md:col-span-2 lg:col-span-2 lg:row-span-1 lg:row-start-2 overflow-hidden rounded-2xl scroll-reveal" data-reveal-delay="200">
                 <div class="carousel-container relative overflow-hidden">
                     <!-- Navigation Buttons -->
                     <button class="absolute top-1/2 left-2 transform -translate-y-1/2 bg-black bg-opacity-30 hover:bg-opacity-50 text-white p-2 rounded-full transition-all duration-300 z-10" id="prevBtn">
@@ -424,7 +425,7 @@ new class extends Component
             </div>
 
             <!-- Contact Section -->
-            <div id="section-contact" class=" lg:row-start-3 lg:row-end-5 portfolio-card-colored bg-portfolio-green dark:bg-green-600 text-white min-h-[250px] sm:min-h-[300px] flex items-center justify-center">
+            <div id="section-contact" class=" lg:row-start-3 lg:row-end-5 portfolio-card-colored bg-portfolio-green dark:bg-green-600 text-white min-h-[250px] sm:min-h-[300px] flex items-center justify-center scroll-reveal" data-reveal-delay="300">
                 <div class="tile-glow tile-glow-white" id="glow-contact"></div>
                 <div class="h-full flex flex-col p-4 sm:p-6">
                     <div class="text-center mb-6">
@@ -554,7 +555,7 @@ new class extends Component
             </div>
 
             <!-- Projects Section -->
-            <div id="section-projects" class="lg:row-start-3 lg:row-end-4 md:col-span-2 lg:col-span-2 portfolio-card-colored bg-portfolio-red dark:bg-red-600 text-white min-h-[300px]">
+            <div id="section-projects" class="lg:row-start-3 lg:row-end-4 md:col-span-2 lg:col-span-2 portfolio-card-colored bg-portfolio-red dark:bg-red-600 text-white min-h-[300px] scroll-reveal" data-reveal-delay="400">
                 <div class="tile-glow tile-glow-white" id="glow-projects"></div>
                 <div class="h-full flex flex-col">
                     <h3 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6 sm:mb-8 text-center">PROJECTS</h3>
@@ -588,7 +589,7 @@ new class extends Component
             </div>
 
             <!-- Social Links -->
-            <div class="lg:col-span-2 lg:row-start-4 lg:row-end-5 portfolio-card-colored bg-portfolio-yellow dark:bg-yellow-500 text-gray-800 dark:text-gray-900 mb-8 lg:mb-0">
+            <div class="lg:col-span-2 lg:row-start-4 lg:row-end-5 portfolio-card-colored bg-portfolio-yellow dark:bg-yellow-500 text-gray-800 dark:text-gray-900 mb-8 lg:mb-0 scroll-reveal" data-reveal-delay="500">
                 <div class="tile-glow tile-glow-white" id="glow-social"></div>
                 <div class="text-center">
                     <h3 class="text-xl sm:text-2xl font-bold mb-6 sm:mb-8 text-gray-700 dark:text-gray-800">Connect With Me</h3>
@@ -837,5 +838,22 @@ new class extends Component
         tile.addEventListener('mouseleave', () => {
             tile.style.transform = 'perspective(800px) rotateX(0) rotateY(0) translateY(0)';
         });
+    });
+
+    // Scroll reveal with stagger
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const delay = parseInt(entry.target.dataset.revealDelay || '0');
+                setTimeout(() => {
+                    entry.target.classList.add('revealed');
+                }, delay);
+                revealObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.scroll-reveal').forEach(el => {
+        revealObserver.observe(el);
     });
 </script>
