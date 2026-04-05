@@ -155,12 +155,12 @@ new class extends Component
     <div class="splash-overlay" id="splashOverlay">
         <div class="ripple-container" id="rippleContainer"></div>
         <div class="splash-flash" id="splashFlash"></div>
-        <div style="position:relative;z-index:1;text-align:center;">
-            <div class="splash-greet" id="splashGreet"></div>
-            <div class="splash-name" id="splashName">
-                <h1>I'm Jay-ar<span>.</span></h1>
-                <div class="splash-title" id="splashTyped"></div>
-            </div>
+        <!-- Greeting text: absolutely centered at ripple origin -->
+        <div class="splash-greet" id="splashGreet" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.3);z-index:2;width:100%;"></div>
+        <!-- Name + CTA: also centered but below the greeting -->
+        <div class="splash-name" id="splashName" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;text-align:center;width:100%;">
+            <h1>I'm Jay-ar<span>.</span></h1>
+            <div class="splash-title" id="splashTyped"></div>
             <div class="splash-cta" id="splashCta">
                 <button onclick="enterPortfolio()">
                     <span>Get to know me &rarr;</span>

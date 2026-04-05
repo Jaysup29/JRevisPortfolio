@@ -491,19 +491,14 @@
   font-weight: 900;
   letter-spacing: -3px;
   opacity: 0;
-  transform: scale(0.3);
-  min-height: 70px;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
-  z-index: 1;
 }
 
 @media (min-width: 640px) {
   .splash-greet {
     font-size: 72px;
-    min-height: 90px;
   }
 }
 
@@ -516,14 +511,14 @@
 }
 
 @keyframes greetPopIn {
-  0% { opacity: 0; transform: scale(0.3); }
-  60% { opacity: 1; transform: scale(1.08); }
-  100% { opacity: 1; transform: scale(1); }
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.3); }
+  60% { opacity: 1; transform: translate(-50%, -50%) scale(1.08); }
+  100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 }
 
 @keyframes greetPopOut {
-  0% { opacity: 1; transform: scale(1); }
-  100% { opacity: 0; transform: scale(1.4); filter: blur(6px); }
+  0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.4); filter: blur(6px); }
 }
 
 .splash-name {
@@ -592,23 +587,26 @@
 }
 
 .splash-cta button {
-  background: transparent;
-  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(67, 97, 238, 0.15);
+  border: 2px solid rgba(67, 97, 238, 0.5);
   color: white;
-  padding: 16px 40px;
+  padding: 16px 44px;
   border-radius: 100px;
-  font-size: 15px;
-  font-weight: 500;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
   letter-spacing: 0.5px;
   transition: all 0.4s ease;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 0 20px rgba(67, 97, 238, 0.15);
 }
 
 :not(.dark) .splash-cta button {
-  border-color: rgba(0,0,0,0.12);
+  background: rgba(67, 97, 238, 0.1);
+  border-color: rgba(67, 97, 238, 0.4);
   color: #1a1a2e;
+  box-shadow: 0 0 20px rgba(67, 97, 238, 0.1);
 }
 
 .splash-cta button::before {
@@ -616,16 +614,22 @@
   position: absolute;
   top: 50%; left: 50%;
   width: 0; height: 0;
-  background: rgba(67,97,238,0.12);
+  background: rgba(67, 97, 238, 0.2);
   border-radius: 50%;
   transform: translate(-50%, -50%);
   transition: width 0.6s ease, height 0.6s ease;
 }
 
 .splash-cta button:hover {
-  border-color: rgba(67,97,238,0.5);
-  box-shadow: 0 0 40px rgba(67,97,238,0.2);
+  background: rgba(67, 97, 238, 0.25);
+  border-color: rgba(67, 97, 238, 0.8);
+  box-shadow: 0 0 40px rgba(67, 97, 238, 0.3);
   transform: translateY(-3px);
+}
+
+:not(.dark) .splash-cta button:hover {
+  background: rgba(67, 97, 238, 0.15);
+  box-shadow: 0 0 40px rgba(67, 97, 238, 0.2);
 }
 
 .splash-cta button:hover::before {
