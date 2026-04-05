@@ -33,8 +33,9 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction
 # Install frontend dependencies and build assets
 RUN npm ci && npm run build
 
-# Create SQLite database
-RUN touch database/database.sqlite
+# Create SQLite database and .env file
+RUN touch database/database.sqlite \
+    && cp .env.example .env
 
 # Ensure directories exist before setting permissions
 RUN mkdir -p storage/logs storage/framework/cache storage/framework/sessions storage/framework/views bootstrap/cache public/build
