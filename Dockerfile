@@ -6,11 +6,12 @@ RUN apt-get update && apt-get install -y \
     git \
     curl \
     libpq-dev \
+    libsqlite3-dev \
     zip \
     unzip \
     nodejs \
     npm \
-    && docker-php-ext-install pdo pdo_pgsql \
+    && docker-php-ext-install pdo pdo_sqlite pdo_pgsql \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -23,44 +24,38 @@ WORKDIR /var/www/html
 # Copy composer
 COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
 
-# Copy package files for npm
-COPY package*.json ./
-
-# Install frontend dependencies (including dev dependencies for build)
-RUN npm ci
-
-# Copy configuration files needed for Vite build
-COPY vite.config.js ./
-COPY tailwind.config.js ./
-COPY postcss.config.js ./
-
-# Copy resources folder for Vite build
-COPY resources ./resources
-
-# Copy public directory (needed for Vite output)
-COPY public ./public
-
-# Now copy the rest of the application
+# Copy all application files
 COPY . .
 
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction
+
+# Install frontend dependencies and build assets
+RUN npm ci && npm run build
+
+# Create SQLite database
+RUN touch database/database.sqlite
+
+# Ensure directories exist before setting permissions
+RUN mkdir -p storage/logs storage/framework/cache storage/framework/sessions storage/framework/views bootstrap/cache public/build
 
 # Set permissions for Laravel
 RUN chown -R www-data:www-data \
     /var/www/html/storage \
     /var/www/html/bootstrap/cache \
     /var/www/html/public/build \
+    /var/www/html/database \
     && chmod -R 775 \
     /var/www/html/storage \
-    /var/www/html/bootstrap/cache
+    /var/www/html/bootstrap/cache \
+    /var/www/html/database
 
 # Configure Apache to serve Laravel from /public
 RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf \
     && sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/c\<Directory /var/www/html/public>\n\tOptions Indexes FollowSymLinks\n\tAllowOverride All\n\tRequire all granted\n</Directory>' /etc/apache2/apache2.conf
 
-# Expose port 80
+# Expose port
 EXPOSE 80
 
-# Start Apache
-CMD ["apache2-foreground"]
+# Run migrations then start Apache
+CMD php artisan migrate --force 2>/dev/null; apache2-foreground
