@@ -168,10 +168,7 @@
       transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
 
-  .portfolio-card-colored:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-  }
+  /* hover moved to outside @layer — see below */
 
   /* Custom CSS for your original blue color */
   .bg-portfolio-blue {
@@ -200,4 +197,180 @@
       transform: translateY(-10px);
       transition: all 0.3s ease-in;
   }
+}
+
+/* ===== BACKGROUND EFFECTS ===== */
+
+.morph-bg {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.morph-blob {
+  position: absolute;
+  border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
+  filter: blur(60px);
+  opacity: 0.3;
+}
+
+.dark .morph-blob { opacity: 0.3; }
+.morph-blob { opacity: 0.15; }
+
+.morph-blob-1 {
+  width: 450px; height: 450px;
+  background: linear-gradient(135deg, #4361ee, #2ec4b6);
+  top: 5%; left: 5%;
+  animation: morphBlob1 12s ease-in-out infinite;
+}
+
+.morph-blob-2 {
+  width: 380px; height: 380px;
+  background: linear-gradient(135deg, #e63946, #f4a261);
+  bottom: 5%; right: 5%;
+  animation: morphBlob2 14s ease-in-out infinite;
+}
+
+.morph-blob-3 {
+  width: 300px; height: 300px;
+  background: linear-gradient(135deg, #2ec4b6, #4361ee);
+  top: 40%; left: 40%;
+  animation: morphBlob3 16s ease-in-out infinite;
+}
+
+@keyframes morphBlob1 {
+  0%, 100% { border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%; transform: translate(0, 0) rotate(0deg); }
+  25% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; transform: translate(60px, -40px) rotate(45deg); }
+  50% { border-radius: 30% 70% 50% 50% / 35% 65% 35% 65%; transform: translate(-30px, 50px) rotate(90deg); }
+  75% { border-radius: 55% 45% 65% 35% / 40% 60% 40% 60%; transform: translate(40px, 20px) rotate(135deg); }
+}
+
+@keyframes morphBlob2 {
+  0%, 100% { border-radius: 50% 50% 40% 60% / 55% 45% 55% 45%; transform: translate(0, 0) rotate(0deg); }
+  33% { border-radius: 35% 65% 55% 45% / 50% 50% 50% 50%; transform: translate(-60px, 40px) rotate(-60deg); }
+  66% { border-radius: 65% 35% 45% 55% / 40% 60% 40% 60%; transform: translate(40px, -50px) rotate(-120deg); }
+}
+
+@keyframes morphBlob3 {
+  0%, 100% { border-radius: 45% 55% 60% 40% / 50% 50% 50% 50%; transform: translate(0, 0); }
+  50% { border-radius: 55% 45% 40% 60% / 40% 60% 40% 60%; transform: translate(-40px, -30px) rotate(60deg); }
+}
+
+.film-grain {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 100;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 256px;
+}
+
+.dark .film-grain { opacity: 0.03; }
+.film-grain { opacity: 0.02; }
+
+.cursor-spotlight {
+  position: fixed;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  transition: opacity 0.3s;
+}
+
+.dark .cursor-spotlight {
+  background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, rgba(67,97,238,0.03) 30%, transparent 70%);
+}
+
+.cursor-spotlight {
+  background: radial-gradient(circle, rgba(0,0,0,0.02) 0%, transparent 70%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .morph-blob { animation: none !important; }
+  .film-grain { display: none; }
+}
+
+/* ===== TILE HOVER EFFECTS ===== */
+
+.tile-glow {
+  position: absolute;
+  width: 300px; height: 300px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.portfolio-card-colored:hover .tile-glow {
+  opacity: 1;
+}
+
+.tile-glow { background: radial-gradient(circle, rgba(67,97,238,0.2) 0%, transparent 70%); }
+.tile-glow-white { background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%); }
+
+:not(.dark) .tile-glow { background: radial-gradient(circle, rgba(0,0,0,0.06) 0%, transparent 70%); }
+:not(.dark) .tile-glow-white { background: radial-gradient(circle, rgba(0,0,0,0.06) 0%, transparent 70%); }
+
+.dark .portfolio-card-colored {
+  border: 1px solid rgba(255,255,255,0.04);
+  transition: background 0.5s ease, backdrop-filter 0.5s ease, box-shadow 0.5s ease, border-color 0.5s ease, transform 0.3s ease;
+}
+
+.dark .portfolio-card-colored.bg-portfolio-dark:hover {
+  background: rgba(26, 26, 46, 0.65) !important;
+  backdrop-filter: blur(20px);
+  border-color: rgba(67, 97, 238, 0.3);
+  box-shadow: 0 0 50px rgba(67, 97, 238, 0.15), inset 0 1px 0 rgba(255,255,255,0.06);
+}
+
+.dark .portfolio-card-colored.bg-portfolio-blue:hover,
+.dark .portfolio-card-colored.dark\:bg-blue-600:hover {
+  background: rgba(67, 97, 238, 0.55) !important;
+  backdrop-filter: blur(20px);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 50px rgba(67, 97, 238, 0.2), inset 0 1px 0 rgba(255,255,255,0.08);
+}
+
+.dark .portfolio-card-colored.bg-portfolio-green:hover,
+.dark .portfolio-card-colored.dark\:bg-green-600:hover {
+  background: rgba(46, 196, 182, 0.55) !important;
+  backdrop-filter: blur(20px);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 50px rgba(46, 196, 182, 0.2), inset 0 1px 0 rgba(255,255,255,0.08);
+}
+
+.dark .portfolio-card-colored.bg-portfolio-red:hover,
+.dark .portfolio-card-colored.dark\:bg-red-600:hover {
+  background: rgba(230, 57, 70, 0.55) !important;
+  backdrop-filter: blur(20px);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 50px rgba(230, 57, 70, 0.2), inset 0 1px 0 rgba(255,255,255,0.08);
+}
+
+.dark .portfolio-card-colored.bg-portfolio-yellow:hover,
+.dark .portfolio-card-colored.dark\:bg-yellow-500:hover {
+  background: rgba(244, 162, 97, 0.6) !important;
+  backdrop-filter: blur(20px);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 50px rgba(244, 162, 97, 0.2), inset 0 1px 0 rgba(255,255,255,0.1);
+}
+
+.portfolio-card-colored {
+  border: 1px solid rgba(0,0,0,0.04);
+  transition: background 0.5s ease, backdrop-filter 0.5s ease, box-shadow 0.5s ease, border-color 0.5s ease, transform 0.3s ease;
+}
+
+:not(.dark) .portfolio-card-colored:hover {
+  backdrop-filter: blur(16px);
+  border-color: rgba(0,0,0,0.1);
+}
+
+.portfolio-card-colored:hover {
+  transform: none;
+  box-shadow: none;
 }

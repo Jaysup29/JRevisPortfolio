@@ -150,7 +150,7 @@ new class extends Component
     }
 }; ?>
 
-<div class="min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors duration-300 p-2 sm:p-4">
+<div class="min-h-screen bg-[#f0f1f5] dark:bg-[#0a0a14] transition-colors duration-300 p-2 sm:p-4">
     <!-- Dark Mode Toggle -->
     <button 
         wire:click="toggleDarkMode"

@@ -45,6 +45,14 @@
     </script>
 </head>
 <body class="antialiased">
+    <!-- Background Effects -->
+    <div class="morph-bg" aria-hidden="true">
+        <div class="morph-blob morph-blob-1"></div>
+        <div class="morph-blob morph-blob-2"></div>
+        <div class="morph-blob morph-blob-3"></div>
+    </div>
+    <div class="film-grain" aria-hidden="true"></div>
+    <div class="cursor-spotlight" id="cursorSpotlight" aria-hidden="true"></div>
     <div id="guest-layout" class="min-h-screen flex flex-col">
         <!-- Page Content -->
         <main class="flex-1">

@@ -66,3 +66,12 @@ window.addEventListener('orientationchange', function() {
         window.scrollTo(0, window.scrollY - 1);
     }, 100);
 });
+
+// Cursor spotlight - follows mouse across page
+document.addEventListener('mousemove', (e) => {
+    const spotlight = document.getElementById('cursorSpotlight');
+    if (spotlight) {
+        spotlight.style.left = e.clientX + 'px';
+        spotlight.style.top = e.clientY + 'px';
+    }
+});
