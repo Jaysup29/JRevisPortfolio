@@ -873,4 +873,167 @@ new class extends Component
     document.querySelectorAll('.scroll-reveal').forEach(el => {
         revealObserver.observe(el);
     });
+
+    // ===== SPLASH SCREEN =====
+    const greetingsData = [
+        { word: 'Kumusta', color: '#f4a261' },
+        { word: 'Hello', color: '#4361ee' },
+        { word: 'Hola', color: '#e63946' },
+        { word: 'Bonjour', color: '#2ec4b6' },
+        { word: '\u3053\u3093\u306b\u3061\u306f', color: '#a78bfa' },
+        { word: '\uc548\ub155\ud558\uc138\uc694', color: '#f472b6' },
+        { word: 'Ciao', color: '#34d399' },
+        { word: 'Hallo', color: '#fbbf24' },
+        { word: 'Ol\u00e1', color: '#60a5fa' },
+        { word: 'Merhaba', color: '#fb923c' },
+        { word: '\u041f\u0440\u0438\u0432\u0435\u0442', color: '#a78bfa' },
+        { word: '\u4f60\u597d', color: '#4361ee' },
+        { word: 'Namaste', color: '#2ec4b6' },
+        { word: 'Aloha', color: '#f4a261' },
+    ];
+
+    function initSplash() {
+        if (sessionStorage.getItem('splashSeen')) {
+            const overlay = document.getElementById('splashOverlay');
+            if (overlay) overlay.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            revealTilesInstantly();
+            return;
+        }
+
+        document.body.style.overflow = 'hidden';
+        const greetEl = document.getElementById('splashGreet');
+        const rippleContainer = document.getElementById('rippleContainer');
+        const flashEl = document.getElementById('splashFlash');
+        if (!greetEl || !rippleContainer || !flashEl) return;
+
+        let cycleIndex = 0;
+
+        function spawnRipple(color) {
+            const size = 600 + Math.random() * 400;
+            const ripple = document.createElement('div');
+            ripple.className = 'ripple-ring';
+            ripple.style.width = size + 'px';
+            ripple.style.height = size + 'px';
+            ripple.style.color = color;
+            rippleContainer.appendChild(ripple);
+
+            flashEl.classList.remove('flash');
+            void flashEl.offsetWidth;
+            flashEl.style.background = 'radial-gradient(circle at center, ' + color + '11 0%, transparent 60%)';
+            flashEl.classList.add('flash');
+
+            setTimeout(() => ripple.remove(), 1200);
+        }
+
+        function showGreet(index) {
+            greetEl.textContent = greetingsData[index].word;
+            greetEl.style.color = greetingsData[index].color;
+            greetEl.classList.remove('pop-out');
+            void greetEl.offsetWidth;
+            greetEl.classList.add('pop-in');
+            spawnRipple(greetingsData[index].color);
+        }
+
+        function hideGreet() {
+            greetEl.classList.remove('pop-in');
+            greetEl.classList.add('pop-out');
+        }
+
+        showGreet(0);
+
+        const interval = setInterval(() => {
+            hideGreet();
+            setTimeout(() => {
+                cycleIndex++;
+                if (cycleIndex >= greetingsData.length) {
+                    clearInterval(interval);
+                    greetEl.classList.remove('pop-out');
+                    greetEl.textContent = 'Hello';
+                    greetEl.style.color = '#4361ee';
+                    void greetEl.offsetWidth;
+                    greetEl.classList.add('pop-in');
+                    spawnRipple('#4361ee');
+                    setTimeout(() => spawnRipple('#4361ee'), 200);
+                    setTimeout(() => spawnRipple('#4361ee'), 400);
+                    setTimeout(showNameReveal, 1200);
+                    return;
+                }
+                showGreet(cycleIndex);
+            }, 200);
+        }, 350);
+    }
+
+    function showNameReveal() {
+        const greetEl = document.getElementById('splashGreet');
+        greetEl.classList.remove('pop-in');
+        greetEl.classList.add('pop-out');
+
+        setTimeout(() => {
+            greetEl.style.display = 'none';
+            document.getElementById('splashName').classList.add('visible');
+            setTimeout(startSplashTyping, 500);
+        }, 300);
+    }
+
+    function startSplashTyping() {
+        const text = "I build things for the web.";
+        const el = document.getElementById('splashTyped');
+        let i = 0;
+        function typeChar() {
+            if (i < text.length) {
+                el.innerHTML = text.substring(0, i + 1) + '<span class="typing-cursor"></span>';
+                i++;
+                setTimeout(typeChar, 55);
+            } else {
+                el.innerHTML = text + '<span class="typing-cursor"></span>';
+                setTimeout(() => document.getElementById('splashCta').classList.add('visible'), 300);
+            }
+        }
+        typeChar();
+    }
+
+    function enterPortfolio() {
+        sessionStorage.setItem('splashSeen', 'true');
+        document.getElementById('splashOverlay').classList.add('hidden');
+        document.body.style.overflow = 'auto';
+
+        setTimeout(() => {
+            const entries = [
+                { id: 'section-home', cls: 'tile-enter-hero' },
+                { id: 'section-about', cls: 'tile-enter-side' },
+                { id: 'section-contact', cls: 'tile-enter-bottom-1' },
+                { id: 'section-projects', cls: 'tile-enter-bottom-2' },
+            ];
+            entries.forEach(t => {
+                const el = document.getElementById(t.id);
+                if (el) {
+                    el.classList.remove('tile-enter-hidden');
+                    el.classList.add(t.cls);
+                }
+            });
+            // Reveal other tiles instantly
+            document.querySelectorAll('.tile-enter-hidden').forEach(el => {
+                el.classList.remove('tile-enter-hidden');
+                el.style.opacity = '1';
+                el.style.pointerEvents = 'auto';
+            });
+
+            // Start hero typing after tiles animate in
+            setTimeout(startHeroTyping, 1500);
+        }, 400);
+    }
+
+    function revealTilesInstantly() {
+        document.querySelectorAll('.tile-enter-hidden').forEach(el => {
+            el.classList.remove('tile-enter-hidden');
+            el.style.opacity = '1';
+            el.style.pointerEvents = 'auto';
+        });
+        startHeroTyping();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(initSplash, 300);
+    });
 </script>
