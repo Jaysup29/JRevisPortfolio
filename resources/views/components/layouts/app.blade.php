@@ -35,6 +35,14 @@
         ::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.3); border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.5); }
     </style>
+
+    <!-- Dark mode applied before paint to prevent flash -->
+    <script>
+        if (localStorage.getItem('darkMode') === 'true' ||
+            (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
 </head>
 <body class="antialiased">
     <div id="app-layout" class="min-h-screen flex flex-col">
@@ -66,10 +74,6 @@
             flipDuration: 4000,
             darkModeKey: 'portfolio_dark_mode'
         };
-        if (localStorage.getItem('darkMode') === 'true' || 
-            (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-        }
     </script>
 </body>
 </html>
