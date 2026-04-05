@@ -166,7 +166,7 @@ new class extends Component
         <div class="mobile-grid">
             
             <!-- Main Hero Section -->
-            <div id="section-home" class="lg:row-span-1 lg:row-start-1 sm:col-span-2 lg:col-span-2">
+            <div id="section-home" class="lg:row-span-1 lg:row-start-1 md:col-span-2 lg:col-span-2">
                 <div class="portfolio-card-colored bg-portfolio-dark dark:bg-gray-800 text-white h-full min-h-[300px] sm:min-h-[400px] relative overflow-hidden">
                     <div class="relative z-10 h-full flex flex-col justify-center">
                         <h1 class="mobile-hero-title font-bold mb-2 sm:mb-4 leading-tight">
@@ -249,7 +249,7 @@ new class extends Component
                 x-init="startAutoRotate()"
                 @mouseenter="stopAutoRotate()" 
                 @mouseleave="startAutoRotate()"
-                class="relative lg:row-span-1 lg:row-start-1 lg:row-end-3 portfolio-card-colored bg-portfolio-blue dark:bg-blue-600 text-white min-h-[480px] sm:min-h-[400px] flex items-center justify-center"
+                class="relative lg:row-span-1 lg:row-start-1 lg:row-end-3 portfolio-card-colored bg-portfolio-blue dark:bg-blue-600 text-white min-h-[480px] sm:min-h-[400px] lg:min-h-[500px] flex items-center justify-center"
             >
                 <div class="h-full flex flex-col p-4 sm:p-6 relative w-full">
                     <div class="text-center mb-6">
@@ -258,7 +258,7 @@ new class extends Component
                     </div>
 
                     <!-- Content Container with Fixed Height -->
-                    <div class="flex-1 relative pb-14 sm:pb-16 min-h-[200px] sm:min-h-[280px]">
+                    <div class="flex-1 relative pb-14 sm:pb-16 min-h-[200px] sm:min-h-[280px] lg:min-h-[340px]">
                         <!-- Professional Journey -->
                         <div
                             class="absolute inset-0 pb-14 sm:pb-16 transition-opacity duration-300 ease-in-out"
@@ -284,7 +284,7 @@ new class extends Component
                                 <span class="text-2xl">🚀</span>
                                 Core Expertise
                             </h3>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-2 sm:gap-4 lg:gap-2 xl:gap-4">
                                 <div class="bg-blue-700 dark:bg-blue-800 bg-opacity-50 rounded-lg p-2 sm:p-4">
                                     <div class="flex items-center gap-2 mb-1 sm:mb-2">
                                         <span class="text-lg">🔧</span>
@@ -352,7 +352,7 @@ new class extends Component
                     </div>
 
                     <!-- Navigation Controls -->
-                    <div class="absolute bottom-2 sm:bottom-4 left-0 right-0 flex justify-between items-center px-3 sm:px-6 gap-2 sm:gap-4">
+                    <div class="absolute bottom-2 sm:bottom-4 left-0 right-0 flex justify-between items-center px-3 sm:px-6 gap-2 sm:gap-4 z-20">
                         <!-- Previous Button -->
                         <button
                             @click="goToPrev()"
@@ -375,7 +375,7 @@ new class extends Component
             </div>
             
             <!-- Technology Stack -->
-            <div class="sm:col-span-2 lg:col-span-2 lg:row-span-1 lg:row-start-2 overflow-hidden rounded-2xl">
+            <div class="md:col-span-2 lg:col-span-2 lg:row-span-1 lg:row-start-2 overflow-hidden rounded-2xl">
                 <div class="carousel-container relative overflow-hidden">
                     <!-- Navigation Buttons -->
                     <button class="absolute top-1/2 left-2 transform -translate-y-1/2 bg-black bg-opacity-30 hover:bg-opacity-50 text-white p-2 rounded-full transition-all duration-300 z-10" id="prevBtn">
@@ -551,7 +551,7 @@ new class extends Component
             </div>
 
             <!-- Projects Section -->
-            <div id="section-projects" class="lg:row-start-3 lg:row-end-4 sm:col-span-2 lg:col-span-2 portfolio-card-colored bg-portfolio-red dark:bg-red-600 text-white min-h-[300px]">
+            <div id="section-projects" class="lg:row-start-3 lg:row-end-4 md:col-span-2 lg:col-span-2 portfolio-card-colored bg-portfolio-red dark:bg-red-600 text-white min-h-[300px]">
                 <div class="h-full flex flex-col">
                     <h3 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6 sm:mb-8 text-center">PROJECTS</h3>
                     

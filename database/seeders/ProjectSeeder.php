@@ -39,7 +39,7 @@ class ProjectSeeder extends Seeder
         ];
 
         foreach ($projects as $project) {
-            Project::create($project);
+            Project::firstOrCreate(['acronym' => $project['acronym']], $project);
         }
     }
 }
