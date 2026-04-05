@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: jrevis-portfolio
+    runtime: php
+    plan: free
+    buildCommand: chmod +x render-build.sh && ./render-build.sh
+    startCommand: php artisan serve --host=0.0.0.0 --port=$PORT
+    envVars:
+      - key: APP_NAME
+        value: "Jay-ar Revis Portfolio"
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_URL
+        generateValue: false
+      - key: APP_KEY
+        generateValue: true
+      - key: DB_CONNECTION
+        value: sqlite
+      - key: SESSION_DRIVER
+        value: cookie
+      - key: CACHE_STORE
+        value: file
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: BCRYPT_ROUNDS
+        value: "12"
