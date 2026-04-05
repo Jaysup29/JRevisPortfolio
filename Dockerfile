@@ -65,4 +65,4 @@ RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available
 EXPOSE 80
 
 # Run migrations then start Apache
-CMD php artisan migrate --force 2>/dev/null; apache2-foreground
+CMD php artisan migrate --force 2>/dev/null; php artisan db:seed --force 2>/dev/null; apache2-foreground

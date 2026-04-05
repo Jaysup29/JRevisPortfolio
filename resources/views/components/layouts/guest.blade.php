@@ -54,9 +54,6 @@
 
     @livewireScripts
 
-    <!-- Alpine.js -->
-    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.13.3/cdn.js"></script>
-
     <!-- Custom Scripts -->
     <script>
         window.portfolioConfig = {
