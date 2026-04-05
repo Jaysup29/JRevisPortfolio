@@ -12,11 +12,11 @@ export default {
     theme: {
         extend: {
             colors: {
-                'portfolio-dark': '#1e3a5f',
-                'portfolio-blue': '#4a90e2',
-                'portfolio-green': '#2dd4bf',
-                'portfolio-red': '#ef4444',
-                'portfolio-yellow': '#fbbf24',
+                'portfolio-dark': '#1a1a2e',
+                'portfolio-blue': '#4361ee',
+                'portfolio-green': '#2ec4b6',
+                'portfolio-red': '#e63946',
+                'portfolio-yellow': '#f4a261',
             },
             animation: {
                 'fade-in': 'fadeIn 0.6s ease-out forwards',
