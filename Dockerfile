@@ -38,8 +38,7 @@ RUN cp .env.example .env
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 # Install frontend dependencies and build assets
-RUN npm ci && npm run build \
-    && ls -la public/build/manifest.json
+RUN npm ci && npm run build
 
 # Create SQLite database
 RUN touch database/database.sqlite
