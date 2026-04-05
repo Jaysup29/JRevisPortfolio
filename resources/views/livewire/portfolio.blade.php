@@ -168,6 +168,7 @@ new class extends Component
             <!-- Main Hero Section -->
             <div id="section-home" class="lg:row-span-1 lg:row-start-1 md:col-span-2 lg:col-span-2">
                 <div class="portfolio-card-colored bg-portfolio-dark dark:bg-gray-800 text-white h-full min-h-[300px] sm:min-h-[400px] relative overflow-hidden">
+                    <div class="tile-glow" id="glow-hero"></div>
                     <div class="relative z-10 h-full flex flex-col justify-center">
                         <h1 class="mobile-hero-title font-bold mb-2 sm:mb-4 leading-tight">
                             JAY-AR <span class="text-portfolio-yellow dark:text-yellow-400">REVIS</span>
@@ -251,6 +252,7 @@ new class extends Component
                 @mouseleave="startAutoRotate()"
                 class="relative lg:row-span-1 lg:row-start-1 lg:row-end-3 portfolio-card-colored bg-portfolio-blue dark:bg-blue-600 text-white min-h-[480px] sm:min-h-[400px] lg:min-h-[500px] flex items-center justify-center"
             >
+                <div class="tile-glow tile-glow-white" id="glow-about"></div>
                 <div class="h-full flex flex-col p-4 sm:p-6 relative w-full">
                     <div class="text-center mb-6">
                         <h2 class="text-3xl sm:text-4xl font-bold mb-2">ABOUT ME</h2>
@@ -423,6 +425,7 @@ new class extends Component
 
             <!-- Contact Section -->
             <div id="section-contact" class=" lg:row-start-3 lg:row-end-5 portfolio-card-colored bg-portfolio-green dark:bg-green-600 text-white min-h-[250px] sm:min-h-[300px] flex items-center justify-center">
+                <div class="tile-glow tile-glow-white" id="glow-contact"></div>
                 <div class="h-full flex flex-col p-4 sm:p-6">
                     <div class="text-center mb-6">
                         <h3 class="text-3xl sm:text-4xl font-bold mb-2">LET'S CONNECT</h3>
@@ -552,6 +555,7 @@ new class extends Component
 
             <!-- Projects Section -->
             <div id="section-projects" class="lg:row-start-3 lg:row-end-4 md:col-span-2 lg:col-span-2 portfolio-card-colored bg-portfolio-red dark:bg-red-600 text-white min-h-[300px]">
+                <div class="tile-glow tile-glow-white" id="glow-projects"></div>
                 <div class="h-full flex flex-col">
                     <h3 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6 sm:mb-8 text-center">PROJECTS</h3>
                     
@@ -585,6 +589,7 @@ new class extends Component
 
             <!-- Social Links -->
             <div class="lg:col-span-2 lg:row-start-4 lg:row-end-5 portfolio-card-colored bg-portfolio-yellow dark:bg-yellow-500 text-gray-800 dark:text-gray-900 mb-8 lg:mb-0">
+                <div class="tile-glow tile-glow-white" id="glow-social"></div>
                 <div class="text-center">
                     <h3 class="text-xl sm:text-2xl font-bold mb-6 sm:mb-8 text-gray-700 dark:text-gray-800">Connect With Me</h3>
                     
@@ -809,5 +814,28 @@ new class extends Component
         // Initialize
         createDots();
         trackAutoScroll();
+    });
+
+    // Inner glow follows cursor inside tile
+    document.querySelectorAll('.portfolio-card-colored').forEach(tile => {
+        const glow = tile.querySelector('.tile-glow');
+        if (!glow) return;
+
+        tile.addEventListener('mousemove', (e) => {
+            const rect = tile.getBoundingClientRect();
+            glow.style.left = (e.clientX - rect.left) + 'px';
+            glow.style.top = (e.clientY - rect.top) + 'px';
+
+            // 3D tilt
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const rotateX = (y - rect.height / 2) / rect.height * -6;
+            const rotateY = (x - rect.width / 2) / rect.width * 6;
+            tile.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-2px)`;
+        });
+
+        tile.addEventListener('mouseleave', () => {
+            tile.style.transform = 'perspective(800px) rotateX(0) rotateY(0) translateY(0)';
+        });
     });
 </script>
