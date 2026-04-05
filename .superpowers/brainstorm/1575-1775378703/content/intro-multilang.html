@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multilingual Greeting Intro</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; background: #0a0a14; color: white; overflow: hidden; min-height: 100vh; }
+  body.unlocked { overflow: auto; }
+
+  /* ======= SPLASH ======= */
+  .splash {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: #0a0a14; z-index: 200;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+  }
+  .splash.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+
+  .splash-blob {
+    position: absolute;
+    width: 300px; height: 300px;
+    border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
+    filter: blur(80px); opacity: 0.2;
+    background: linear-gradient(135deg, #4361ee, #2ec4b6);
+    animation: blobPulse 8s ease-in-out infinite;
+  }
+  @keyframes blobPulse {
+    0%, 100% { border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%; transform: scale(1); }
+    50% { border-radius: 58% 42% 30% 70% / 55% 55% 45% 45%; transform: scale(1.15) rotate(30deg); }
+  }
+
+  .splash-content { position: relative; z-index: 1; text-align: center; }
+
+  /* Rotating greetings */
+  .greet-container {
+    height: 70px;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .greet-word {
+    font-size: 52px;
+    font-weight: 900;
+    letter-spacing: -2px;
+    position: absolute;
+    opacity: 0;
+    transform: translateY(30px) scale(0.9);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    white-space: nowrap;
+  }
+  .greet-word.active {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  .greet-word.exit {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.9);
+  }
+
+  /* Color cycle for greetings */
+  .greet-word:nth-child(1) { color: #f4a261; }
+  .greet-word:nth-child(2) { color: #4361ee; }
+  .greet-word:nth-child(3) { color: #2ec4b6; }
+  .greet-word:nth-child(4) { color: #e63946; }
+  .greet-word:nth-child(5) { color: #a78bfa; }
+  .greet-word:nth-child(6) { color: #f472b6; }
+  .greet-word:nth-child(7) { color: #34d399; }
+  .greet-word:nth-child(8) { color: #fbbf24; }
+  .greet-word:nth-child(9) { color: #60a5fa; }
+  .greet-word:nth-child(10) { color: #f4a261; }
+  .greet-word:nth-child(11) { color: #fb923c; }
+  .greet-word:nth-child(12) { color: #4361ee; }
+
+  /* After greetings finish */
+  .splash-name {
+    font-size: 48px; font-weight: 900; letter-spacing: -2px;
+    opacity: 0; transform: translateY(15px);
+    transition: all 0.7s ease;
+    margin-bottom: 4px;
+  }
+  .splash-name.visible { opacity: 1; transform: translateY(0); }
+  .splash-name span { color: #f4a261; }
+
+  .splash-title {
+    color: #4361ee; font-size: 16px; font-weight: 600;
+    height: 24px; margin-bottom: 28px;
+    opacity: 0; transition: opacity 0.5s ease;
+  }
+  .splash-title.visible { opacity: 1; }
+
+  .typing-cursor {
+    display: inline-block; width: 2px; height: 1em;
+    background: #4361ee; margin-left: 2px;
+    animation: blink 1s step-end infinite;
+    vertical-align: text-bottom;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .splash-cta {
+    opacity: 0; transform: translateY(10px);
+    transition: all 0.6s ease;
+  }
+  .splash-cta.visible { opacity: 1; transform: translateY(0); }
+
+  .splash-cta button {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.15);
+    color: white; padding: 14px 36px; border-radius: 100px;
+    font-size: 14px; font-weight: 500; cursor: pointer;
+    letter-spacing: 0.5px; transition: all 0.4s ease;
+    position: relative; overflow: hidden;
+  }
+  .splash-cta button::before {
+    content: ''; position: absolute; top: 50%; left: 50%;
+    width: 0; height: 0; background: rgba(67,97,238,0.15);
+    border-radius: 50%; transform: translate(-50%,-50%);
+    transition: width 0.5s ease, height 0.5s ease;
+  }
+  .splash-cta button:hover {
+    border-color: rgba(67,97,238,0.4);
+    box-shadow: 0 0 30px rgba(67,97,238,0.15);
+    transform: translateY(-2px);
+  }
+  .splash-cta button:hover::before { width: 300px; height: 300px; }
+  .splash-cta button span { position: relative; z-index: 1; }
+
+  /* ======= PORTFOLIO ======= */
+  .morph-bg {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; overflow: hidden;
+  }
+  .morph-blob {
+    position: absolute; border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
+    filter: blur(60px); opacity: 0.3;
+  }
+  .morph-blob:nth-child(1) { width: 450px; height: 450px; background: linear-gradient(135deg, #4361ee, #2ec4b6); top: 5%; left: 5%; animation: m1 12s ease-in-out infinite; }
+  .morph-blob:nth-child(2) { width: 380px; height: 380px; background: linear-gradient(135deg, #e63946, #f4a261); bottom: 5%; right: 5%; animation: m2 14s ease-in-out infinite; }
+  .morph-blob:nth-child(3) { width: 300px; height: 300px; background: linear-gradient(135deg, #2ec4b6, #4361ee); top: 40%; left: 40%; animation: m3 16s ease-in-out infinite; }
+  @keyframes m1 { 0%,100%{transform:translate(0,0) rotate(0)} 50%{transform:translate(-30px,50px) rotate(90deg)} }
+  @keyframes m2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(40px,-50px) rotate(-120deg)} }
+  @keyframes m3 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-40px,-30px) rotate(60deg)} }
+
+  .grain {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.03; pointer-events: none; z-index: 100;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 256px;
+  }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 24px; position: relative; z-index: 2; }
+  .grid { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; }
+
+  .tile {
+    border-radius: 20px; padding: 28px; color: white; position: relative; overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.04); opacity: 0; pointer-events: none;
+  }
+  .tile.hero { background: #1a1a2e; }
+  .tile.blue { background: #4361ee; text-align: center; display:flex;flex-direction:column;align-items:center;justify-content:center; }
+  .tile.green { background: #2ec4b6; text-align: center; display:flex;flex-direction:column;align-items:center;justify-content:center; }
+  .tile.red { background: #e63946; text-align: center; display:flex;flex-direction:column;align-items:center;justify-content:center; }
+  .tile.amber { background: #f4a261; color: #1a1a2e; text-align: center; grid-column: span 2; }
+  .tile h2 { font-size: 32px; font-weight: 800; }
+  .tile h2 span { color: #f4a261; }
+  .tile .sub { color: #4361ee; font-size: 15px; margin: 4px 0 14px; font-weight: 600; }
+  .tile .desc { color: #94a3b8; font-size: 13px; line-height: 1.7; }
+  .tile h3 { font-size: 22px; font-weight: 700; }
+  .tile p { font-size: 13px; color: rgba(255,255,255,0.85); margin-top: 6px; }
+
+  .tile.enter-hero { animation: fromLeft 0.8s cubic-bezier(0.16,1,0.3,1) 0.1s forwards; pointer-events: auto; }
+  .tile.enter-side { animation: fromRight 0.7s cubic-bezier(0.16,1,0.3,1) 0.4s forwards; pointer-events: auto; }
+  .tile.enter-bottom-1 { animation: fromBelow 0.6s cubic-bezier(0.16,1,0.3,1) 0.7s forwards; pointer-events: auto; }
+  .tile.enter-bottom-2 { animation: fromBelow 0.6s cubic-bezier(0.16,1,0.3,1) 0.9s forwards; pointer-events: auto; }
+  .tile.enter-stretch { animation: stretch 0.7s cubic-bezier(0.16,1,0.3,1) 1.2s forwards; pointer-events: auto; }
+
+  @keyframes fromLeft { 0%{opacity:0;transform:translateX(-80px) scale(0.9)} 100%{opacity:1;transform:translateX(0) scale(1)} }
+  @keyframes fromRight { 0%{opacity:0;transform:translateX(80px) scale(0.9)} 100%{opacity:1;transform:translateX(0) scale(1)} }
+  @keyframes fromBelow { 0%{opacity:0;transform:translateY(50px) scale(0.9)} 100%{opacity:1;transform:translateY(0) scale(1)} }
+  @keyframes stretch { 0%{opacity:0;transform:scaleX(0.4) scaleY(0.8)} 60%{opacity:1;transform:scaleX(1.03) scaleY(1)} 100%{opacity:1;transform:scaleX(1) scaleY(1)} }
+
+  .btn-row { display: flex; gap: 12px; margin-top: 20px; }
+  .btn { padding: 10px 24px; border-radius: 10px; font-weight: 600; font-size: 13px; border: none; cursor: pointer; transition: transform 0.2s; }
+  .btn:hover { transform: translateY(-2px); }
+  .btn.primary { background: #f4a261; color: #1a1a2e; }
+  .btn.outline { background: transparent; border: 2px solid #f4a261; color: #f4a261; }
+
+  .replay-btn {
+    position: fixed; bottom: 24px; right: 24px;
+    background: rgba(67,97,238,0.15); border: 1px solid rgba(67,97,238,0.3);
+    color: #4361ee; padding: 10px 20px; border-radius: 100px; cursor: pointer;
+    font-size: 12px; letter-spacing: 1px; text-transform: uppercase; z-index: 150;
+    opacity: 0; pointer-events: none; transition: all 0.3s;
+  }
+  .replay-btn.visible { opacity: 1; pointer-events: auto; }
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div class="splash" id="splash">
+  <div class="splash-blob"></div>
+  <div class="splash-content">
+    <div class="greet-container" id="greetContainer">
+      <div class="greet-word">Kumusta</div>
+      <div class="greet-word">Hello</div>
+      <div class="greet-word">Hola</div>
+      <div class="greet-word">Bonjour</div>
+      <div class="greet-word">こんにちは</div>
+      <div class="greet-word">안녕하세요</div>
+      <div class="greet-word">Ciao</div>
+      <div class="greet-word">Hallo</div>
+      <div class="greet-word">Olá</div>
+      <div class="greet-word">Merhaba</div>
+      <div class="greet-word">Привет</div>
+      <div class="greet-word">你好</div>
+    </div>
+
+    <div class="splash-name" id="splashName">I'm Jay-ar<span>.</span></div>
+    <div class="splash-title" id="splashTitle"></div>
+    <div class="splash-cta" id="splashCta">
+      <button onclick="enterPortfolio()">
+        <span>Get to know me →</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- PORTFOLIO -->
+<div class="morph-bg"><div class="morph-blob"></div><div class="morph-blob"></div><div class="morph-blob"></div></div>
+<div class="grain"></div>
+<div class="container">
+  <div class="grid">
+    <div class="tile hero" id="t-hero">
+      <h2>JAY-AR <span>REVIS</span></h2>
+      <div class="sub">Full Stack Web Developer</div>
+      <p class="desc">Passionate full-stack developer with expertise in modern web technologies. I create robust, scalable applications using Laravel, Livewire, and cutting-edge frontend frameworks.</p>
+      <div class="btn-row">
+        <button class="btn primary">View Projects</button>
+        <button class="btn outline">Contact Me</button>
+      </div>
+    </div>
+    <div class="tile blue" id="t-about"><h3>ABOUT ME</h3><p>👨‍💻 Professional Journey</p></div>
+    <div class="tile green" id="t-contact"><h3>LET'S CONNECT</h3><p>Ready to bring your ideas to life?</p></div>
+    <div class="tile red" id="t-projects"><h3>PROJECTS</h3><p>Featured work & case studies</p></div>
+    <div class="tile amber" id="t-social" style="padding:20px;"><h3>Connect With Me</h3><p style="opacity:0.7;">🐙 💼 📘 📷 🐦 ✉️</p></div>
+  </div>
+</div>
+<button class="replay-btn" id="replayBtn" onclick="replay()">Replay</button>
+
+<script>
+  const greetings = document.querySelectorAll('.greet-word');
+  let greetIndex = 0;
+  let greetInterval;
+  let greetPhase = 'cycling'; // cycling -> settling -> name -> typing -> cta
+
+  function startGreetCycle() {
+    greetings[0].classList.add('active');
+
+    greetInterval = setInterval(() => {
+      const current = greetings[greetIndex];
+      current.classList.remove('active');
+      current.classList.add('exit');
+
+      greetIndex = (greetIndex + 1) % greetings.length;
+      const next = greetings[greetIndex];
+      next.classList.remove('exit');
+      next.classList.add('active');
+
+      // Remove exit class after transition
+      setTimeout(() => current.classList.remove('exit'), 500);
+    }, 400);
+
+    // After cycling through, slow down and stop
+    setTimeout(() => {
+      clearInterval(greetInterval);
+
+      // Slow final cycle
+      let slowIndex = greetIndex;
+      let delay = 500;
+      function slowCycle() {
+        const current = greetings[slowIndex];
+        current.classList.remove('active');
+        current.classList.add('exit');
+        slowIndex = (slowIndex + 1) % greetings.length;
+        greetings[slowIndex].classList.remove('exit');
+        greetings[slowIndex].classList.add('active');
+        setTimeout(() => current.classList.remove('exit'), 500);
+
+        delay += 150;
+        if (delay < 1200) {
+          setTimeout(slowCycle, delay);
+        } else {
+          // Land on "Hello" (index 1)
+          setTimeout(() => {
+            const cur = greetings[slowIndex];
+            cur.classList.remove('active');
+            cur.classList.add('exit');
+            greetings[1].classList.remove('exit');
+            greetings[1].classList.add('active');
+            setTimeout(() => cur.classList.remove('exit'), 500);
+
+            // Fade out greeting, show name
+            setTimeout(showName, 800);
+          }, delay);
+        }
+      }
+      slowCycle();
+    }, 3500);
+  }
+
+  function showName() {
+    const container = document.getElementById('greetContainer');
+    container.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    container.style.opacity = '0';
+    container.style.transform = 'translateY(-10px)';
+
+    setTimeout(() => {
+      container.style.display = 'none';
+      document.getElementById('splashName').classList.add('visible');
+
+      // Start typing
+      setTimeout(() => {
+        document.getElementById('splashTitle').classList.add('visible');
+        typeSplash();
+      }, 600);
+    }, 500);
+  }
+
+  // Typing
+  const splashText = "I build things for the web.";
+  const splashTitle = document.getElementById('splashTitle');
+  let si = 0;
+  function typeSplash() {
+    if (si < splashText.length) {
+      splashTitle.innerHTML = splashText.substring(0, si + 1) + '<span class="typing-cursor"></span>';
+      si++;
+      setTimeout(typeSplash, 60);
+    } else {
+      splashTitle.innerHTML = splashText + '<span class="typing-cursor"></span>';
+      // Show CTA
+      setTimeout(() => {
+        document.getElementById('splashCta').classList.add('visible');
+      }, 400);
+    }
+  }
+
+  // Enter
+  function enterPortfolio() {
+    document.getElementById('splash').classList.add('hidden');
+    document.body.classList.add('unlocked');
+    setTimeout(() => {
+      document.getElementById('t-hero').classList.add('enter-hero');
+      document.getElementById('t-about').classList.add('enter-side');
+      document.getElementById('t-contact').classList.add('enter-bottom-1');
+      document.getElementById('t-projects').classList.add('enter-bottom-2');
+      document.getElementById('t-social').classList.add('enter-stretch');
+      setTimeout(() => document.getElementById('replayBtn').classList.add('visible'), 2000);
+    }, 400);
+  }
+
+  // Replay
+  function replay() {
+    document.getElementById('replayBtn').classList.remove('visible');
+    document.body.classList.remove('unlocked');
+    ['t-hero','t-about','t-contact','t-projects','t-social'].forEach(id => {
+      const el = document.getElementById(id);
+      el.classList.remove('enter-hero','enter-side','enter-bottom-1','enter-bottom-2','enter-stretch');
+      el.style.opacity = '0';
+    });
+    const splash = document.getElementById('splash');
+    splash.classList.remove('hidden');
+
+    // Reset greeting
+    const container = document.getElementById('greetContainer');
+    container.style.display = 'flex';
+    container.style.opacity = '1';
+    container.style.transform = 'translateY(0)';
+    greetings.forEach(g => { g.classList.remove('active','exit'); });
+    greetIndex = 0;
+
+    document.getElementById('splashName').classList.remove('visible');
+    document.getElementById('splashTitle').classList.remove('visible');
+    document.getElementById('splashCta').classList.remove('visible');
+    splashTitle.innerHTML = '';
+    si = 0;
+
+    setTimeout(startGreetCycle, 300);
+  }
+
+  // Start
+  setTimeout(startGreetCycle, 500);
+</script>
+</body>
+</html>

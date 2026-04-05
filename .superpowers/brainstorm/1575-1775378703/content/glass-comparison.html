@@ -1,0 +1,143 @@
+<h2>Glassmorphism Intensity: 3 Levels</h2>
+<p class="subtitle">Same tile layout, different glass intensity. Click the one you prefer.</p>
+
+<style>
+  .tile-grid {
+    background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #0f0f1a 100%);
+    padding: 20px;
+    border-radius: 16px;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 12px;
+    position: relative;
+    overflow: hidden;
+  }
+  .tile-grid::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 40%, rgba(67, 97, 238, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 70% 60%, rgba(46, 196, 182, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 50% 20%, rgba(244, 162, 97, 0.08) 0%, transparent 40%);
+    pointer-events: none;
+  }
+  .tile {
+    border-radius: 16px;
+    padding: 24px;
+    color: white;
+    position: relative;
+    z-index: 1;
+  }
+  .tile h3 { margin: 0 0 6px 0; font-size: 16px; }
+  .tile p { margin: 0; font-size: 11px; color: rgba(255,255,255,0.7); }
+  .tile.hero { grid-row: span 1; }
+  .tile.hero h2 { margin: 0 0 4px 0; font-size: 22px; }
+  .tile.hero .sub { color: #4361ee; font-size: 12px; margin: 0 0 8px 0; }
+
+  /* Subtle */
+  .subtle .tile.hero { background: #1a1a2e; border: 1px solid rgba(255,255,255,0.06); }
+  .subtle .tile.blue { background: #4361ee; border: 1px solid rgba(255,255,255,0.08); }
+  .subtle .tile.green { background: #2ec4b6; border: 1px solid rgba(255,255,255,0.08); }
+  .subtle .tile.red { background: #e63946; border: 1px solid rgba(255,255,255,0.08); }
+
+  /* Medium */
+  .medium .tile.hero { background: rgba(26, 26, 46, 0.75); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.1); }
+  .medium .tile.blue { background: rgba(67, 97, 238, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.15); }
+  .medium .tile.green { background: rgba(46, 196, 182, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.15); }
+  .medium .tile.red { background: rgba(230, 57, 70, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.15); }
+
+  /* Bold */
+  .bold .tile.hero { background: rgba(26, 26, 46, 0.45); backdrop-filter: blur(20px) saturate(1.5); border: 1px solid rgba(255,255,255,0.18); box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1); }
+  .bold .tile.blue { background: rgba(67, 97, 238, 0.35); backdrop-filter: blur(20px) saturate(1.5); border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 8px 32px rgba(67, 97, 238, 0.2), inset 0 1px 0 rgba(255,255,255,0.15); }
+  .bold .tile.green { background: rgba(46, 196, 182, 0.35); backdrop-filter: blur(20px) saturate(1.5); border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 8px 32px rgba(46, 196, 182, 0.2), inset 0 1px 0 rgba(255,255,255,0.15); }
+  .bold .tile.red { background: rgba(230, 57, 70, 0.35); backdrop-filter: blur(20px) saturate(1.5); border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 8px 32px rgba(230, 57, 70, 0.2), inset 0 1px 0 rgba(255,255,255,0.15); }
+</style>
+
+<div class="cards">
+  <div class="card" data-choice="subtle" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="tile-grid subtle">
+        <div class="tile hero">
+          <h2>JAY-AR <span style="color:#f4a261;">REVIS</span></h2>
+          <p class="sub">Full Stack Web Developer</p>
+          <p>Passionate developer...</p>
+        </div>
+        <div class="tile blue" style="text-align:center;">
+          <h3>ABOUT ME</h3>
+          <p>Professional Journey</p>
+        </div>
+        <div class="tile green" style="text-align:center;">
+          <h3>LET'S CONNECT</h3>
+          <p>Get in touch</p>
+        </div>
+        <div class="tile red" style="text-align:center;">
+          <h3>PROJECTS</h3>
+          <p>Featured work</p>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A. Subtle Hint</h3>
+      <p>Solid tiles with light border glow. Clean and minimal. Barely transparent.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="medium" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="tile-grid medium">
+        <div class="tile hero">
+          <h2>JAY-AR <span style="color:#f4a261;">REVIS</span></h2>
+          <p class="sub">Full Stack Web Developer</p>
+          <p>Passionate developer...</p>
+        </div>
+        <div class="tile blue" style="text-align:center;">
+          <h3>ABOUT ME</h3>
+          <p>Professional Journey</p>
+        </div>
+        <div class="tile green" style="text-align:center;">
+          <h3>LET'S CONNECT</h3>
+          <p>Get in touch</p>
+        </div>
+        <div class="tile red" style="text-align:center;">
+          <h3>PROJECTS</h3>
+          <p>Featured work</p>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B. Medium Glass</h3>
+      <p>Semi-transparent with backdrop blur. You can sense the background through tiles. Balanced.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="bold" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="tile-grid bold">
+        <div class="tile hero">
+          <h2>JAY-AR <span style="color:#f4a261;">REVIS</span></h2>
+          <p class="sub">Full Stack Web Developer</p>
+          <p>Passionate developer...</p>
+        </div>
+        <div class="tile blue" style="text-align:center;">
+          <h3>ABOUT ME</h3>
+          <p>Professional Journey</p>
+        </div>
+        <div class="tile green" style="text-align:center;">
+          <h3>LET'S CONNECT</h3>
+          <p>Get in touch</p>
+        </div>
+        <div class="tile red" style="text-align:center;">
+          <h3>PROJECTS</h3>
+          <p>Featured work</p>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C. Bold Glass</h3>
+      <p>Strong transparency with saturated blur, inner glow edges, and colored shadows. Dramatic and eye-catching.</p>
+    </div>
+  </div>
+</div>

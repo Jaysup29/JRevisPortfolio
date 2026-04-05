@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    
+
     <title>{{ $title ?? 'Portfolio - Jay-ar Revis' }}</title>
 
     <!-- SEO Meta -->
@@ -36,15 +36,31 @@
         ::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.5); }
     </style>
 
-    <!-- Dark mode applied before paint to prevent flash -->
+    <!-- Dark mode + background applied before paint -->
     <script>
-        if (localStorage.getItem('darkMode') === 'true' ||
-            (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-        }
+        (function() {
+            var isDark = localStorage.getItem('darkMode') === 'true' ||
+                (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            if (isDark) {
+                document.documentElement.classList.add('dark');
+            }
+            var s = document.createElement('style');
+            s.textContent = 'html, body { background-color: ' + (isDark ? '#0a0a14' : '#f0f1f5') + ' !important; }';
+            document.head.appendChild(s);
+            window.__bgStyle = s;
+        })();
     </script>
 </head>
 <body class="antialiased">
+    <!-- Background Effects -->
+    <div class="morph-bg" aria-hidden="true">
+        <div class="morph-blob morph-blob-1"></div>
+        <div class="morph-blob morph-blob-2"></div>
+        <div class="morph-blob morph-blob-3"></div>
+    </div>
+    <div class="film-grain" aria-hidden="true"></div>
+    <div class="cursor-spotlight" id="cursorSpotlight" aria-hidden="true"></div>
+
     <div id="app-layout" class="min-h-screen flex flex-col">
         <!-- Header -->
         <header>
@@ -63,14 +79,5 @@
     </div>
 
     @livewireScripts
-
-    <!-- Custom Scripts -->
-    <script>
-        window.portfolioConfig = {
-            autoFlipInterval: 25000,
-            flipDuration: 4000,
-            darkModeKey: 'portfolio_dark_mode'
-        };
-    </script>
 </body>
 </html>

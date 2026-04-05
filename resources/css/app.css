@@ -199,6 +199,16 @@
   }
 }
 
+/* ===== PAGE BACKGROUND ===== */
+.portfolio-bg {
+  background-color: #f0f1f5;
+  transition: background-color 0.3s ease;
+}
+
+.dark .portfolio-bg {
+  background-color: #0a0a14;
+}
+
 /* ===== BACKGROUND EFFECTS ===== */
 
 .morph-bg {
@@ -217,7 +227,7 @@
 }
 
 .dark .morph-blob { opacity: 0.3; }
-.morph-blob { opacity: 0.15; }
+.morph-blob { opacity: 0.35; filter: blur(80px); }
 
 .morph-blob-1 {
   width: 450px; height: 450px;
@@ -433,8 +443,19 @@
   pointer-events: none;
 }
 
+/* Light mode: thicker, more visible ripples */
+:not(.dark) .ripple-ring {
+  border-width: 3px;
+  animation: rippleExpandLight 1.2s cubic-bezier(0, 0.5, 0.3, 1) forwards;
+}
+
 @keyframes rippleExpand {
   0% { transform: translate(-50%, -50%) scale(0); opacity: 0.6; border-width: 3px; }
+  100% { transform: translate(-50%, -50%) scale(1); opacity: 0; border-width: 1px; }
+}
+
+@keyframes rippleExpandLight {
+  0% { transform: translate(-50%, -50%) scale(0); opacity: 0.8; border-width: 4px; }
   100% { transform: translate(-50%, -50%) scale(1); opacity: 0; border-width: 1px; }
 }
 
@@ -448,6 +469,16 @@
 
 .splash-flash.flash {
   animation: flashFade 0.4s ease-out forwards;
+}
+
+/* Light mode: stronger flash */
+:not(.dark) .splash-flash.flash {
+  animation: flashFadeLight 0.5s ease-out forwards;
+}
+
+@keyframes flashFadeLight {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
 }
 
 @keyframes flashFade {
@@ -608,11 +639,11 @@
 
 .tile-enter-hidden { opacity: 0; pointer-events: none; }
 
-.tile-enter-hero { animation: tileFromLeft 0.8s cubic-bezier(0.16,1,0.3,1) 0.1s forwards; pointer-events: auto; }
-.tile-enter-side { animation: tileFromRight 0.7s cubic-bezier(0.16,1,0.3,1) 0.4s forwards; pointer-events: auto; }
-.tile-enter-bottom-1 { animation: tileFromBelow 0.6s cubic-bezier(0.16,1,0.3,1) 0.7s forwards; pointer-events: auto; }
-.tile-enter-bottom-2 { animation: tileFromBelow 0.6s cubic-bezier(0.16,1,0.3,1) 0.9s forwards; pointer-events: auto; }
-.tile-enter-stretch { animation: tileStretch 0.7s cubic-bezier(0.16,1,0.3,1) 1.2s forwards; pointer-events: auto; }
+.tile-enter-hero { opacity: 0; animation: tileFromLeft 0.8s cubic-bezier(0.16,1,0.3,1) 0.1s both; pointer-events: auto; }
+.tile-enter-side { opacity: 0; animation: tileFromRight 0.7s cubic-bezier(0.16,1,0.3,1) 0.4s both; pointer-events: auto; }
+.tile-enter-bottom-1 { opacity: 0; animation: tileFromBelow 0.6s cubic-bezier(0.16,1,0.3,1) 0.7s both; pointer-events: auto; }
+.tile-enter-bottom-2 { opacity: 0; animation: tileFromBelow 0.6s cubic-bezier(0.16,1,0.3,1) 0.9s both; pointer-events: auto; }
+.tile-enter-stretch { opacity: 0; animation: tileStretch 0.7s cubic-bezier(0.16,1,0.3,1) 1.2s both; pointer-events: auto; }
 
 @keyframes tileFromLeft { 0%{opacity:0;transform:translateX(-80px) scale(0.9)} 100%{opacity:1;transform:translateX(0) scale(1)} }
 @keyframes tileFromRight { 0%{opacity:0;transform:translateX(80px) scale(0.9)} 100%{opacity:1;transform:translateX(0) scale(1)} }

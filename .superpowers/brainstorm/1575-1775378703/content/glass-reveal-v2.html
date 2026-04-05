@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glass Reveal v2</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #0a0a14;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Morphing blobs */
+  .morph-bg {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .morph-blob {
+    position: absolute;
+    border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
+    filter: blur(60px);
+    opacity: 0.3;
+  }
+  .morph-blob:nth-child(1) {
+    width: 450px; height: 450px;
+    background: linear-gradient(135deg, #4361ee, #2ec4b6);
+    top: 5%; left: 5%;
+    animation: morph1 12s ease-in-out infinite;
+  }
+  .morph-blob:nth-child(2) {
+    width: 380px; height: 380px;
+    background: linear-gradient(135deg, #e63946, #f4a261);
+    bottom: 5%; right: 5%;
+    animation: morph2 14s ease-in-out infinite;
+  }
+  .morph-blob:nth-child(3) {
+    width: 300px; height: 300px;
+    background: linear-gradient(135deg, #2ec4b6, #4361ee);
+    top: 40%; left: 40%;
+    animation: morph3 16s ease-in-out infinite;
+  }
+  @keyframes morph1 {
+    0%, 100% { border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%; transform: translate(0, 0) rotate(0deg); }
+    25% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; transform: translate(60px, -40px) rotate(45deg); }
+    50% { border-radius: 30% 70% 50% 50% / 35% 65% 35% 65%; transform: translate(-30px, 50px) rotate(90deg); }
+    75% { border-radius: 55% 45% 65% 35% / 40% 60% 40% 60%; transform: translate(40px, 20px) rotate(135deg); }
+  }
+  @keyframes morph2 {
+    0%, 100% { border-radius: 50% 50% 40% 60% / 55% 45% 55% 45%; transform: translate(0, 0) rotate(0deg); }
+    33% { border-radius: 35% 65% 55% 45% / 50% 50% 50% 50%; transform: translate(-60px, 40px) rotate(-60deg); }
+    66% { border-radius: 65% 35% 45% 55% / 40% 60% 40% 60%; transform: translate(40px, -50px) rotate(-120deg); }
+  }
+  @keyframes morph3 {
+    0%, 100% { border-radius: 45% 55% 60% 40% / 50% 50% 50% 50%; transform: translate(0, 0); }
+    50% { border-radius: 55% 45% 40% 60% / 40% 60% 40% 60%; transform: translate(-40px, -30px) rotate(60deg); }
+  }
+
+  /* Film grain */
+  .grain {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    opacity: 0.03;
+    pointer-events: none;
+    z-index: 100;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 256px;
+  }
+
+  /* Cursor spotlight */
+  .spotlight {
+    position: fixed;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.06) 0%, rgba(67, 97, 238, 0.04) 30%, transparent 70%);
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .label-hint {
+    text-align: center;
+    color: #475569;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 16px;
+  }
+
+  /* ===== TILES ===== */
+  /* Solid by default, glass reveals on proximity */
+  .tile {
+    border-radius: 20px;
+    padding: 32px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    transform-style: preserve-3d;
+    transition: backdrop-filter 0.6s ease, box-shadow 0.6s ease, border-color 0.6s ease;
+    border: 1px solid rgba(255,255,255,0.04);
+
+    /* Scroll reveal */
+    opacity: 0;
+    transform: translateY(30px);
+    animation: slideUp 0.6s ease forwards;
+  }
+  .tile:nth-child(1) { animation-delay: 0.1s; }
+  .tile:nth-child(2) { animation-delay: 0.25s; }
+  .tile:nth-child(3) { animation-delay: 0.4s; }
+  .tile:nth-child(4) { animation-delay: 0.55s; }
+  .tile:nth-child(5) { animation-delay: 0.65s; }
+  @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+
+  /* Solid backgrounds (default) */
+  .tile.hero { background: #1a1a2e; }
+  .tile.blue { background: #4361ee; }
+  .tile.green { background: #2ec4b6; }
+  .tile.red { background: #e63946; }
+  .tile.amber { background: #f4a261; color: #1a1a2e; }
+
+  /* ---- GLASS ACTIVE STATE ---- */
+  /* The tile keeps its color tint but becomes semi-transparent */
+  /* so the morphing blobs show through subtly */
+  .tile.hero.glass-active {
+    background: rgba(26, 26, 46, 0.7);
+    backdrop-filter: blur(20px);
+    border-color: rgba(67, 97, 238, 0.25);
+    box-shadow: 0 0 50px rgba(67, 97, 238, 0.12), inset 0 1px 0 rgba(255,255,255,0.05);
+  }
+  .tile.blue.glass-active {
+    background: rgba(67, 97, 238, 0.65);
+    backdrop-filter: blur(20px);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 50px rgba(67, 97, 238, 0.2), inset 0 1px 0 rgba(255,255,255,0.08);
+  }
+  .tile.green.glass-active {
+    background: rgba(46, 196, 182, 0.6);
+    backdrop-filter: blur(20px);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 50px rgba(46, 196, 182, 0.2), inset 0 1px 0 rgba(255,255,255,0.08);
+  }
+  .tile.red.glass-active {
+    background: rgba(230, 57, 70, 0.6);
+    backdrop-filter: blur(20px);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 50px rgba(230, 57, 70, 0.2), inset 0 1px 0 rgba(255,255,255,0.08);
+  }
+  .tile.amber.glass-active {
+    background: rgba(244, 162, 97, 0.65);
+    backdrop-filter: blur(20px);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 50px rgba(244, 162, 97, 0.2), inset 0 1px 0 rgba(255,255,255,0.1);
+  }
+
+  /* Animated border - only shows when glass is active */
+  @property --border-angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+  }
+  @keyframes rotateBorder { to { --border-angle: 360deg; } }
+
+  .tile .animated-border {
+    position: absolute;
+    top: -2px; left: -2px; right: -2px; bottom: -2px;
+    border-radius: 22px;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    animation: rotateBorder 5s linear infinite;
+  }
+  .tile.hero .animated-border {
+    background: conic-gradient(from var(--border-angle, 0deg), transparent 30%, rgba(67, 97, 238, 0.5) 50%, transparent 70%);
+  }
+  .tile.blue .animated-border {
+    background: conic-gradient(from var(--border-angle, 0deg), transparent 30%, rgba(255, 255, 255, 0.35) 50%, transparent 70%);
+  }
+  .tile.green .animated-border {
+    background: conic-gradient(from var(--border-angle, 0deg), transparent 30%, rgba(255, 255, 255, 0.35) 50%, transparent 70%);
+  }
+  .tile.red .animated-border {
+    background: conic-gradient(from var(--border-angle, 0deg), transparent 30%, rgba(255, 255, 255, 0.35) 50%, transparent 70%);
+  }
+  .tile.amber .animated-border {
+    background: conic-gradient(from var(--border-angle, 0deg), transparent 30%, rgba(26, 26, 46, 0.35) 50%, transparent 70%);
+  }
+
+  .tile.glass-active .animated-border {
+    opacity: 1;
+  }
+
+  /* Pulse when glass active */
+  @keyframes softPulse {
+    0%, 100% { opacity: 0.12; }
+    50% { opacity: 0.2; }
+  }
+  .tile.glass-active::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.1);
+    animation: softPulse 3s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  /* Content stays fully visible */
+  .tile h2 { font-size: 32px; font-weight: 800; margin-bottom: 6px; position: relative; z-index: 2; }
+  .tile h2 span { color: #f4a261; }
+  .tile .sub { color: #4361ee; font-size: 15px; margin-bottom: 14px; font-weight: 600; position: relative; z-index: 2; }
+  .tile .desc { color: #94a3b8; font-size: 13px; line-height: 1.7; position: relative; z-index: 2; }
+  .tile h3 { font-size: 22px; font-weight: 700; margin-bottom: 6px; position: relative; z-index: 2; }
+  .tile p { position: relative; z-index: 2; }
+
+  .btn-row { display: flex; gap: 12px; margin-top: 20px; position: relative; z-index: 2; }
+  .btn {
+    padding: 10px 24px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 13px;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn.primary { background: #f4a261; color: #1a1a2e; }
+  .btn.primary:hover { box-shadow: 0 4px 20px rgba(244, 162, 97, 0.4); }
+  .btn.outline { background: transparent; border: 2px solid #f4a261; color: #f4a261; }
+
+  /* Typing cursor */
+  .typing-cursor {
+    display: inline-block; width: 2px; height: 1em;
+    background: #4361ee; margin-left: 2px;
+    animation: blink 1s step-end infinite;
+    vertical-align: text-bottom;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* Decorative */
+  .deco {
+    position: absolute; border-radius: 50%; opacity: 0.08; z-index: 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="morph-bg">
+  <div class="morph-blob"></div>
+  <div class="morph-blob"></div>
+  <div class="morph-blob"></div>
+</div>
+
+<div class="grain"></div>
+<div class="spotlight" id="spotlight"></div>
+
+<div class="container">
+  <p class="label-hint">Move your cursor near the tiles — watch glass reveal</p>
+
+  <div class="grid">
+    <!-- Hero -->
+    <div class="tile hero" onmousemove="tilt(event, this)" onmouseleave="resetTilt(this)">
+      <div class="animated-border"></div>
+      <div class="deco" style="width:120px;height:120px;background:#f4a261;top:-30px;right:-30px;"></div>
+      <div class="deco" style="width:80px;height:80px;background:#4361ee;bottom:-20px;left:-20px;opacity:0.12;"></div>
+      <h2>JAY-AR <span>REVIS</span></h2>
+      <div class="sub" id="typed"></div>
+      <p class="desc">Passionate full-stack developer with expertise in modern web technologies. I create robust, scalable applications using Laravel, Livewire, and cutting-edge frontend frameworks.</p>
+      <div class="btn-row">
+        <button class="btn primary">View Projects</button>
+        <button class="btn outline">Contact Me</button>
+      </div>
+    </div>
+
+    <!-- About -->
+    <div class="tile blue" style="text-align:center;" onmousemove="tilt(event, this)" onmouseleave="resetTilt(this)">
+      <div class="animated-border"></div>
+      <h3>ABOUT ME</h3>
+      <div style="width:30px;height:2px;background:rgba(255,255,255,0.4);margin:8px auto 14px;position:relative;z-index:2;"></div>
+      <p style="font-size:13px;color:rgba(255,255,255,0.85);">👨‍💻 Professional Journey</p>
+      <p style="font-size:12px;color:rgba(255,255,255,0.65);margin-top:10px;line-height:1.6;">5+ years building dynamic web applications</p>
+    </div>
+
+    <!-- Contact -->
+    <div class="tile green" style="text-align:center;" onmousemove="tilt(event, this)" onmouseleave="resetTilt(this)">
+      <div class="animated-border"></div>
+      <h3>LET'S CONNECT</h3>
+      <div style="width:30px;height:2px;background:rgba(255,255,255,0.4);margin:8px auto 14px;position:relative;z-index:2;"></div>
+      <p style="font-size:13px;color:rgba(255,255,255,0.85);">Ready to bring your ideas to life?</p>
+    </div>
+
+    <!-- Projects -->
+    <div class="tile red" style="text-align:center;" onmousemove="tilt(event, this)" onmouseleave="resetTilt(this)">
+      <div class="animated-border"></div>
+      <h3>PROJECTS</h3>
+      <div style="width:30px;height:2px;background:rgba(255,255,255,0.4);margin:8px auto 14px;position:relative;z-index:2;"></div>
+      <p style="font-size:13px;color:rgba(255,255,255,0.85);">Featured work & case studies</p>
+    </div>
+
+    <!-- Social -->
+    <div class="tile amber" style="grid-column: span 2; text-align:center; padding:24px;" onmousemove="tilt(event, this)" onmouseleave="resetTilt(this)">
+      <div class="animated-border"></div>
+      <h3>Connect With Me</h3>
+      <p style="font-size:14px;margin-top:8px;opacity:0.7;">🐙 💼 📘 📷 🐦 ✉️</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  const spotlight = document.getElementById('spotlight');
+  const tiles = document.querySelectorAll('.tile');
+
+  document.addEventListener('mousemove', (e) => {
+    spotlight.style.left = e.clientX + 'px';
+    spotlight.style.top = e.clientY + 'px';
+
+    // Proximity-based glass reveal
+    tiles.forEach(tile => {
+      const rect = tile.getBoundingClientRect();
+      // Check if cursor is within or near the tile
+      const nearX = Math.max(rect.left - e.clientX, 0, e.clientX - rect.right);
+      const nearY = Math.max(rect.top - e.clientY, 0, e.clientY - rect.bottom);
+      const distance = Math.sqrt(nearX * nearX + nearY * nearY);
+
+      if (distance < 120) {
+        tile.classList.add('glass-active');
+      } else {
+        tile.classList.remove('glass-active');
+      }
+    });
+  });
+
+  // 3D tilt
+  function tilt(e, el) {
+    const rect = el.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const rotateX = (y - rect.height / 2) / rect.height * -6;
+    const rotateY = (x - rect.width / 2) / rect.width * 6;
+    el.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-2px)`;
+  }
+  function resetTilt(el) {
+    el.style.transform = 'perspective(800px) rotateX(0) rotateY(0) translateY(0)';
+  }
+
+  // Typing animation
+  const text = "Full Stack Web Developer";
+  const typed = document.getElementById('typed');
+  let i = 0;
+  function typeChar() {
+    if (i < text.length) {
+      typed.innerHTML = text.substring(0, i + 1) + '<span class="typing-cursor"></span>';
+      i++;
+      setTimeout(typeChar, 80);
+    } else {
+      typed.innerHTML = text + '<span class="typing-cursor"></span>';
+    }
+  }
+  setTimeout(typeChar, 800);
+</script>
+</body>
+</html>

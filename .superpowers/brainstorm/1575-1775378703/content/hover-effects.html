@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hover Effects Comparison</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #0a0a14;
+    min-height: 100vh;
+    overflow-x: hidden;
+    color: white;
+  }
+
+  .morph-bg {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; overflow: hidden;
+  }
+  .morph-blob {
+    position: absolute; border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
+    filter: blur(60px); opacity: 0.3;
+  }
+  .morph-blob:nth-child(1) { width: 450px; height: 450px; background: linear-gradient(135deg, #4361ee, #2ec4b6); top: 5%; left: 5%; animation: m1 12s ease-in-out infinite; }
+  .morph-blob:nth-child(2) { width: 380px; height: 380px; background: linear-gradient(135deg, #e63946, #f4a261); bottom: 5%; right: 5%; animation: m2 14s ease-in-out infinite; }
+  .morph-blob:nth-child(3) { width: 300px; height: 300px; background: linear-gradient(135deg, #2ec4b6, #4361ee); top: 40%; left: 40%; animation: m3 16s ease-in-out infinite; }
+  @keyframes m1 { 0%,100%{border-radius:42% 58% 70% 30%/45% 45% 55% 55%;transform:translate(0,0) rotate(0)} 50%{border-radius:30% 70% 50% 50%/35% 65% 35% 65%;transform:translate(-30px,50px) rotate(90deg)} }
+  @keyframes m2 { 0%,100%{border-radius:50% 50% 40% 60%/55% 45% 55% 45%;transform:translate(0,0)} 50%{border-radius:65% 35% 45% 55%/40% 60% 40% 60%;transform:translate(40px,-50px) rotate(-120deg)} }
+  @keyframes m3 { 0%,100%{border-radius:45% 55% 60% 40%/50% 50% 50% 50%;transform:translate(0,0)} 50%{border-radius:55% 45% 40% 60%/40% 60% 40% 60%;transform:translate(-40px,-30px) rotate(60deg)} }
+
+  .grain {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.03; pointer-events: none; z-index: 100;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 256px;
+  }
+
+  .spotlight {
+    position: fixed; width: 500px; height: 500px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, rgba(67,97,238,0.03) 30%, transparent 70%);
+    pointer-events: none; transform: translate(-50%,-50%); z-index: 1;
+  }
+
+  .section {
+    min-height: 100vh; padding: 60px 24px; position: relative;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+  }
+  .section-label {
+    position: absolute; top: 24px; left: 50%; transform: translateX(-50%);
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+    padding: 8px 20px; border-radius: 100px; font-size: 11px;
+    text-transform: uppercase; letter-spacing: 3px; color: #94a3b8; z-index: 10;
+  }
+  .section-desc {
+    text-align: center; color: #64748b; font-size: 13px; margin-bottom: 24px;
+    max-width: 500px; line-height: 1.6; position: relative; z-index: 2;
+  }
+
+  .demo-grid {
+    display: grid; grid-template-columns: 2fr 1fr; gap: 16px;
+    max-width: 800px; width: 100%; position: relative; z-index: 2;
+  }
+
+  .tile {
+    border-radius: 20px; padding: 28px; color: white; position: relative;
+    overflow: hidden; border: 1px solid rgba(255,255,255,0.04);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .tile.hero { background: #1a1a2e; }
+  .tile.blue { background: #4361ee; text-align: center; }
+  .tile h2 { font-size: 26px; font-weight: 800; position: relative; z-index: 2; }
+  .tile h2 span { color: #f4a261; }
+  .tile .sub { color: #4361ee; font-size: 13px; margin: 4px 0 10px; font-weight: 600; position: relative; z-index: 2; }
+  .tile .desc { color: #94a3b8; font-size: 12px; line-height: 1.6; position: relative; z-index: 2; }
+  .tile h3 { font-size: 18px; font-weight: 700; position: relative; z-index: 2; }
+  .tile p { position: relative; z-index: 2; }
+
+  .nav-dots {
+    position: fixed; right: 20px; top: 50%; transform: translateY(-50%);
+    display: flex; flex-direction: column; gap: 12px; z-index: 101;
+  }
+  .nav-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3);
+    cursor: pointer; transition: all 0.3s; position: relative;
+  }
+  .nav-dot.active { background: #4361ee; transform: scale(1.3); }
+  .nav-dot-label {
+    position: absolute; right: 24px; top: 50%; transform: translateY(-50%);
+    font-size: 10px; color: #64748b; white-space: nowrap;
+    opacity: 0; transition: opacity 0.2s; pointer-events: none;
+  }
+  .nav-dot:hover .nav-dot-label { opacity: 1; }
+
+  .pick-label { text-align: center; margin-top: 30px; font-size: 12px; color: #475569; position: relative; z-index: 2; }
+
+  /* ========================================= */
+  /* EFFECT A: LIGHT STREAK                    */
+  /* A diagonal light beam sweeps across tile  */
+  /* ========================================= */
+  .fx-streak .tile::after {
+    content: ''; position: absolute;
+    top: -50%; left: -100%; width: 60%; height: 200%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.07), rgba(255,255,255,0.12), rgba(255,255,255,0.07), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.8s ease;
+    z-index: 1; pointer-events: none;
+  }
+  .fx-streak .tile:hover::after {
+    left: 150%;
+  }
+  .fx-streak .tile:hover {
+    background: rgba(26, 26, 46, 0.65);
+    backdrop-filter: blur(20px);
+    border-color: rgba(67,97,238,0.2);
+    box-shadow: 0 0 40px rgba(67,97,238,0.1);
+  }
+  .fx-streak .tile.blue:hover {
+    background: rgba(67,97,238,0.55);
+    border-color: rgba(255,255,255,0.2);
+    box-shadow: 0 0 40px rgba(67,97,238,0.15);
+  }
+
+  /* ========================================= */
+  /* EFFECT B: EDGE LIGHT TRACE               */
+  /* Light traces along the tile border        */
+  /* ========================================= */
+  @property --trace-pos {
+    syntax: '<percentage>';
+    initial-value: 0%;
+    inherits: false;
+  }
+  .fx-trace .tile {
+    position: relative;
+  }
+  .fx-trace .tile .trace {
+    position: absolute; top: -1px; left: -1px; right: -1px; bottom: -1px;
+    border-radius: 21px; z-index: 1; pointer-events: none;
+    opacity: 0; transition: opacity 0.4s ease;
+    background: conic-gradient(from 0deg at 50% 50%,
+      transparent 0%,
+      transparent var(--trace-pos),
+      rgba(255,255,255,0.5) calc(var(--trace-pos) + 2%),
+      rgba(67,97,238,0.6) calc(var(--trace-pos) + 4%),
+      transparent calc(var(--trace-pos) + 8%),
+      transparent 100%
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    padding: 2px;
+    animation: traceLoop 3s linear infinite;
+  }
+  @keyframes traceLoop {
+    to { --trace-pos: 100%; }
+  }
+  .fx-trace .tile:hover .trace { opacity: 1; }
+  .fx-trace .tile:hover {
+    background: rgba(26,26,46,0.65);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 0 30px rgba(67,97,238,0.1);
+  }
+  .fx-trace .tile.blue:hover {
+    background: rgba(67,97,238,0.55);
+    box-shadow: 0 0 30px rgba(67,97,238,0.15);
+  }
+
+  /* ========================================= */
+  /* EFFECT C: INNER GLOW RIPPLE               */
+  /* Radial glow expands from cursor position  */
+  /* ========================================= */
+  .fx-ripple .tile .glow-point {
+    position: absolute;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(67,97,238,0.2) 0%, transparent 70%);
+    transform: translate(-50%,-50%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 1; pointer-events: none;
+  }
+  .fx-ripple .tile.blue .glow-point {
+    background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+  }
+  .fx-ripple .tile:hover .glow-point { opacity: 1; }
+  .fx-ripple .tile:hover {
+    background: rgba(26,26,46,0.65);
+    backdrop-filter: blur(20px);
+    border-color: rgba(67,97,238,0.2);
+    box-shadow: 0 0 40px rgba(67,97,238,0.1);
+  }
+  .fx-ripple .tile.blue:hover {
+    background: rgba(67,97,238,0.55);
+    border-color: rgba(255,255,255,0.2);
+    box-shadow: 0 0 40px rgba(67,97,238,0.15);
+  }
+</style>
+</head>
+<body>
+
+<div class="morph-bg">
+  <div class="morph-blob"></div>
+  <div class="morph-blob"></div>
+  <div class="morph-blob"></div>
+</div>
+<div class="grain"></div>
+<div class="spotlight" id="spotlight"></div>
+
+<div class="nav-dots">
+  <div class="nav-dot active" onclick="goTo(0)"><span class="nav-dot-label">Light Streak</span></div>
+  <div class="nav-dot" onclick="goTo(1)"><span class="nav-dot-label">Edge Trace</span></div>
+  <div class="nav-dot" onclick="goTo(2)"><span class="nav-dot-label">Inner Glow</span></div>
+</div>
+
+<!-- A: LIGHT STREAK -->
+<div class="section fx-streak" id="s0">
+  <div class="section-label">A — Light Streak</div>
+  <p class="section-desc">A diagonal beam of light sweeps across the tile when you hover, like light reflecting off glass. The tile reveals frosted glass underneath.</p>
+  <div class="demo-grid">
+    <div class="tile hero">
+      <h2>JAY-AR <span>REVIS</span></h2>
+      <div class="sub">Full Stack Web Developer</div>
+      <p class="desc">Hover me — watch the light sweep across</p>
+    </div>
+    <div class="tile blue">
+      <h3>ABOUT ME</h3>
+      <p style="font-size:12px;color:rgba(255,255,255,0.7);margin-top:8px;">Hover to see the streak</p>
+    </div>
+  </div>
+  <p class="pick-label">Scroll down ↓</p>
+</div>
+
+<!-- B: EDGE LIGHT TRACE -->
+<div class="section fx-trace" id="s1">
+  <div class="section-label">B — Edge Light Trace</div>
+  <p class="section-desc">A point of light traces along the tile's border in a continuous loop, like a laser outlining the card. Glass reveals on hover.</p>
+  <div class="demo-grid">
+    <div class="tile hero">
+      <div class="trace"></div>
+      <h2>JAY-AR <span>REVIS</span></h2>
+      <div class="sub">Full Stack Web Developer</div>
+      <p class="desc">Hover me — watch the light trace the edge</p>
+    </div>
+    <div class="tile blue">
+      <div class="trace"></div>
+      <h3>ABOUT ME</h3>
+      <p style="font-size:12px;color:rgba(255,255,255,0.7);margin-top:8px;">Hover to see the trace</p>
+    </div>
+  </div>
+</div>
+
+<!-- C: INNER GLOW RIPPLE -->
+<div class="section fx-ripple" id="s2">
+  <div class="section-label">C — Inner Glow at Cursor</div>
+  <p class="section-desc">A soft radial glow appears inside the tile exactly where your cursor is, like your mouse is a flashlight shining through the glass. Follows your cursor position.</p>
+  <div class="demo-grid">
+    <div class="tile hero" onmousemove="moveGlow(event, this)" onmouseleave="hideGlow(this)">
+      <div class="glow-point"></div>
+      <h2>JAY-AR <span>REVIS</span></h2>
+      <div class="sub">Full Stack Web Developer</div>
+      <p class="desc">Hover and move cursor — the glow follows you</p>
+    </div>
+    <div class="tile blue" onmousemove="moveGlow(event, this)" onmouseleave="hideGlow(this)">
+      <div class="glow-point"></div>
+      <h3>ABOUT ME</h3>
+      <p style="font-size:12px;color:rgba(255,255,255,0.7);margin-top:8px;">Move cursor inside</p>
+    </div>
+  </div>
+  <p class="pick-label" style="margin-top:40px;">Tell me which hover effect you prefer!</p>
+</div>
+
+<script>
+  // Spotlight
+  document.addEventListener('mousemove', (e) => {
+    document.getElementById('spotlight').style.left = e.clientX + 'px';
+    document.getElementById('spotlight').style.top = e.clientY + 'px';
+  });
+
+  // Nav dots
+  const sects = document.querySelectorAll('.section');
+  const dots = document.querySelectorAll('.nav-dot');
+  function goTo(i) { sects[i].scrollIntoView({ behavior: 'smooth' }); }
+  window.addEventListener('scroll', () => {
+    let c = 0;
+    sects.forEach((s, i) => { if (window.scrollY >= s.offsetTop - 300) c = i; });
+    dots.forEach((d, i) => d.classList.toggle('active', i === c));
+  });
+
+  // Inner glow follows cursor
+  function moveGlow(e, tile) {
+    const glow = tile.querySelector('.glow-point');
+    const rect = tile.getBoundingClientRect();
+    glow.style.left = (e.clientX - rect.left) + 'px';
+    glow.style.top = (e.clientY - rect.top) + 'px';
+  }
+  function hideGlow(tile) {
+    // glow hides via CSS :hover
+  }
+</script>
+</body>
+</html>

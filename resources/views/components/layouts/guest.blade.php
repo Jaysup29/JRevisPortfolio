@@ -38,10 +38,19 @@
 
     <!-- Dark mode applied before paint to prevent flash -->
     <script>
-        if (localStorage.getItem('darkMode') === 'true' ||
-            (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-        }
+        (function() {
+            var isDark = localStorage.getItem('darkMode') === 'true' ||
+                (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            if (isDark) {
+                document.documentElement.classList.add('dark');
+            }
+            // Inject background style immediately - no flash
+            var s = document.createElement('style');
+            s.textContent = 'html, body { background-color: ' + (isDark ? '#0a0a14' : '#f0f1f5') + ' !important; }';
+            document.head.appendChild(s);
+            // Store reference so toggleDarkMode can update it
+            window.__bgStyle = s;
+        })();
     </script>
 </head>
 <body class="antialiased">

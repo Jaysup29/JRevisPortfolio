@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Greeting with Ripple Sync</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; background: #0a0a14; color: white; overflow: hidden; min-height: 100vh; }
+  body.unlocked { overflow: auto; }
+
+  .splash {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: #0a0a14; z-index: 200;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    transition: opacity 1s ease, visibility 1s ease;
+  }
+  .splash.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+
+  /* Ripple container */
+  .ripple-container {
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    overflow: hidden; pointer-events: none;
+  }
+  .ripple {
+    position: absolute; top: 50%; left: 50%;
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    border: 2px solid rgba(67, 97, 238, 0.3);
+    animation: rippleOut 1.2s cubic-bezier(0, 0.5, 0.3, 1) forwards;
+    pointer-events: none;
+  }
+  @keyframes rippleOut {
+    0% { transform: translate(-50%, -50%) scale(0); opacity: 0.8; border-width: 3px; }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 0; border-width: 1px; }
+  }
+
+  .splash-content { position: relative; z-index: 1; text-align: center; }
+
+  /* Center greeting */
+  .center-greet {
+    font-size: 72px; font-weight: 900; letter-spacing: -3px;
+    opacity: 0; transform: scale(0.3);
+    min-height: 90px;
+    display: flex; align-items: center; justify-content: center;
+    transition: none;
+  }
+  .center-greet.pop-in {
+    animation: popIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  .center-greet.pop-out {
+    animation: popOut 0.2s ease-in forwards;
+  }
+  @keyframes popIn {
+    0% { opacity: 0; transform: scale(0.3); }
+    60% { opacity: 1; transform: scale(1.08); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  @keyframes popOut {
+    0% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(1.4); filter: blur(6px); }
+  }
+
+  /* Flash on each drop */
+  .flash-overlay {
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(circle at center, rgba(255,255,255,0.06) 0%, transparent 60%);
+    opacity: 0; pointer-events: none; z-index: 0;
+    transition: opacity 0.1s ease;
+  }
+  .flash-overlay.flash {
+    opacity: 1;
+    animation: flashFade 0.4s ease-out forwards;
+  }
+  @keyframes flashFade {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  /* Name reveal */
+  .name-reveal {
+    opacity: 0; transform: translateY(20px);
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .name-reveal.visible { opacity: 1; transform: translateY(0); }
+  .name-reveal h1 { font-size: 56px; font-weight: 900; letter-spacing: -2px; }
+  .name-reveal h1 span { color: #f4a261; }
+  .name-reveal .title { color: #4361ee; font-size: 16px; font-weight: 600; margin-top: 6px; height: 24px; }
+
+  .typing-cursor {
+    display: inline-block; width: 2px; height: 1em;
+    background: #4361ee; margin-left: 2px;
+    animation: blink 1s step-end infinite; vertical-align: text-bottom;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .splash-cta {
+    opacity: 0; transform: translateY(15px);
+    transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    margin-top: 32px;
+  }
+  .splash-cta.visible { opacity: 1; transform: translateY(0); }
+  .splash-cta button {
+    background: transparent; border: 1px solid rgba(255,255,255,0.12);
+    color: white; padding: 16px 40px; border-radius: 100px;
+    font-size: 15px; font-weight: 500; cursor: pointer;
+    letter-spacing: 0.5px; transition: all 0.4s ease;
+    position: relative; overflow: hidden;
+  }
+  .splash-cta button::before {
+    content: ''; position: absolute; top: 50%; left: 50%;
+    width: 0; height: 0; background: rgba(67,97,238,0.12);
+    border-radius: 50%; transform: translate(-50%,-50%);
+    transition: width 0.6s ease, height 0.6s ease;
+  }
+  .splash-cta button:hover {
+    border-color: rgba(67,97,238,0.5);
+    box-shadow: 0 0 40px rgba(67,97,238,0.2); transform: translateY(-3px);
+  }
+  .splash-cta button:hover::before { width: 400px; height: 400px; }
+  .splash-cta button span { position: relative; z-index: 1; }
+
+  /* Portfolio */
+  .morph-bg { position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; overflow: hidden; }
+  .morph-blob { position: absolute; border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%; filter: blur(60px); opacity: 0.3; }
+  .morph-blob:nth-child(1) { width: 450px; height: 450px; background: linear-gradient(135deg, #4361ee, #2ec4b6); top: 5%; left: 5%; animation: m1 12s ease-in-out infinite; }
+  .morph-blob:nth-child(2) { width: 380px; height: 380px; background: linear-gradient(135deg, #e63946, #f4a261); bottom: 5%; right: 5%; animation: m2 14s ease-in-out infinite; }
+  .morph-blob:nth-child(3) { width: 300px; height: 300px; background: linear-gradient(135deg, #2ec4b6, #4361ee); top: 40%; left: 40%; animation: m3 16s ease-in-out infinite; }
+  @keyframes m1 { 0%,100%{transform:translate(0,0) rotate(0)} 50%{transform:translate(-30px,50px) rotate(90deg)} }
+  @keyframes m2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(40px,-50px) rotate(-120deg)} }
+  @keyframes m3 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-40px,-30px) rotate(60deg)} }
+
+  .grain { position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.03; pointer-events: none; z-index: 100;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 256px; }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 24px; position: relative; z-index: 2; }
+  .grid { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; }
+  .tile { border-radius: 20px; padding: 28px; color: white; position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.04); opacity: 0; pointer-events: none; }
+  .tile.hero { background: #1a1a2e; } .tile.blue { background: #4361ee; text-align: center; display:flex;flex-direction:column;align-items:center;justify-content:center; }
+  .tile.green { background: #2ec4b6; text-align: center; display:flex;flex-direction:column;align-items:center;justify-content:center; }
+  .tile.red { background: #e63946; text-align: center; display:flex;flex-direction:column;align-items:center;justify-content:center; }
+  .tile.amber { background: #f4a261; color: #1a1a2e; text-align: center; grid-column: span 2; }
+  .tile h2 { font-size: 32px; font-weight: 800; } .tile h2 span { color: #f4a261; }
+  .tile .sub { color: #4361ee; font-size: 15px; margin: 4px 0 14px; font-weight: 600; }
+  .tile .desc { color: #94a3b8; font-size: 13px; line-height: 1.7; }
+  .tile h3 { font-size: 22px; font-weight: 700; } .tile p { font-size: 13px; color: rgba(255,255,255,0.85); margin-top: 6px; }
+
+  .tile.enter-hero { animation: fromLeft 0.8s cubic-bezier(0.16,1,0.3,1) 0.1s forwards; pointer-events: auto; }
+  .tile.enter-side { animation: fromRight 0.7s cubic-bezier(0.16,1,0.3,1) 0.4s forwards; pointer-events: auto; }
+  .tile.enter-bottom-1 { animation: fromBelow 0.6s cubic-bezier(0.16,1,0.3,1) 0.7s forwards; pointer-events: auto; }
+  .tile.enter-bottom-2 { animation: fromBelow 0.6s cubic-bezier(0.16,1,0.3,1) 0.9s forwards; pointer-events: auto; }
+  .tile.enter-stretch { animation: stretch 0.7s cubic-bezier(0.16,1,0.3,1) 1.2s forwards; pointer-events: auto; }
+  @keyframes fromLeft { 0%{opacity:0;transform:translateX(-80px) scale(0.9)} 100%{opacity:1;transform:translateX(0) scale(1)} }
+  @keyframes fromRight { 0%{opacity:0;transform:translateX(80px) scale(0.9)} 100%{opacity:1;transform:translateX(0) scale(1)} }
+  @keyframes fromBelow { 0%{opacity:0;transform:translateY(50px) scale(0.9)} 100%{opacity:1;transform:translateY(0) scale(1)} }
+  @keyframes stretch { 0%{opacity:0;transform:scaleX(0.4) scaleY(0.8)} 60%{opacity:1;transform:scaleX(1.03) scaleY(1)} 100%{opacity:1;transform:scaleX(1) scaleY(1)} }
+
+  .btn-row { display: flex; gap: 12px; margin-top: 20px; }
+  .btn { padding: 10px 24px; border-radius: 10px; font-weight: 600; font-size: 13px; border: none; cursor: pointer; transition: transform 0.2s; }
+  .btn:hover { transform: translateY(-2px); }
+  .btn.primary { background: #f4a261; color: #1a1a2e; }
+  .btn.outline { background: transparent; border: 2px solid #f4a261; color: #f4a261; }
+
+  .replay-btn { position: fixed; bottom: 24px; right: 24px; background: rgba(67,97,238,0.15); border: 1px solid rgba(67,97,238,0.3);
+    color: #4361ee; padding: 10px 20px; border-radius: 100px; cursor: pointer; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; z-index: 150;
+    opacity: 0; pointer-events: none; transition: all 0.3s; }
+  .replay-btn.visible { opacity: 1; pointer-events: auto; }
+</style>
+</head>
+<body>
+
+<div class="splash" id="splash">
+  <div class="ripple-container" id="rippleContainer"></div>
+  <div class="flash-overlay" id="flashOverlay"></div>
+  <div class="splash-content">
+    <div class="center-greet" id="centerGreet"></div>
+    <div class="name-reveal" id="nameReveal">
+      <h1>I'm Jay-ar<span>.</span></h1>
+      <div class="title" id="splashTyped"></div>
+    </div>
+    <div class="splash-cta" id="splashCta">
+      <button onclick="enterPortfolio()"><span>Get to know me →</span></button>
+    </div>
+  </div>
+</div>
+
+<div class="morph-bg"><div class="morph-blob"></div><div class="morph-blob"></div><div class="morph-blob"></div></div>
+<div class="grain"></div>
+<div class="container">
+  <div class="grid">
+    <div class="tile hero" id="t-hero"><h2>JAY-AR <span>REVIS</span></h2><div class="sub">Full Stack Web Developer</div><p class="desc">Passionate full-stack developer with expertise in modern web technologies.</p><div class="btn-row"><button class="btn primary">View Projects</button><button class="btn outline">Contact Me</button></div></div>
+    <div class="tile blue" id="t-about"><h3>ABOUT ME</h3><p>👨‍💻 Professional Journey</p></div>
+    <div class="tile green" id="t-contact"><h3>LET'S CONNECT</h3><p>Ready to bring your ideas to life?</p></div>
+    <div class="tile red" id="t-projects"><h3>PROJECTS</h3><p>Featured work & case studies</p></div>
+    <div class="tile amber" id="t-social" style="padding:20px;"><h3>Connect With Me</h3><p style="opacity:0.7;">🐙 💼 📘 📷 🐦 ✉️</p></div>
+  </div>
+</div>
+<button class="replay-btn" id="replayBtn" onclick="replay()">Replay</button>
+
+<script>
+  const greetings = [
+    { word: 'Kumusta', color: '#f4a261' },
+    { word: 'Hello', color: '#4361ee' },
+    { word: 'Hola', color: '#e63946' },
+    { word: 'Bonjour', color: '#2ec4b6' },
+    { word: 'こんにちは', color: '#a78bfa' },
+    { word: '안녕하세요', color: '#f472b6' },
+    { word: 'Ciao', color: '#34d399' },
+    { word: 'Hallo', color: '#fbbf24' },
+    { word: 'Olá', color: '#60a5fa' },
+    { word: 'Merhaba', color: '#fb923c' },
+    { word: 'Привет', color: '#a78bfa' },
+    { word: '你好', color: '#4361ee' },
+    { word: 'Namaste', color: '#2ec4b6' },
+    { word: 'Aloha', color: '#f4a261' },
+  ];
+
+  const centerGreet = document.getElementById('centerGreet');
+  const rippleContainer = document.getElementById('rippleContainer');
+  const flashOverlay = document.getElementById('flashOverlay');
+  let cycleIndex = 0;
+
+  // Spawn a ripple ring synced to greeting color
+  function spawnRipple(color) {
+    const size = 600 + Math.random() * 400;
+    const ripple = document.createElement('div');
+    ripple.className = 'ripple';
+    ripple.style.width = size + 'px';
+    ripple.style.height = size + 'px';
+    ripple.style.borderColor = color.replace(')', ', 0.35)').replace('rgb', 'rgba');
+    // Use the hex color directly with alpha
+    ripple.style.borderColor = color;
+    ripple.style.opacity = '0.4';
+    rippleContainer.appendChild(ripple);
+
+    // Flash
+    flashOverlay.classList.remove('flash');
+    void flashOverlay.offsetWidth;
+    flashOverlay.style.background = `radial-gradient(circle at center, ${color}11 0%, transparent 60%)`;
+    flashOverlay.classList.add('flash');
+
+    // Cleanup ripple after animation
+    setTimeout(() => ripple.remove(), 1200);
+  }
+
+  function showGreet(index) {
+    const g = greetings[index];
+    centerGreet.textContent = g.word;
+    centerGreet.style.color = g.color;
+    centerGreet.classList.remove('pop-out');
+    void centerGreet.offsetWidth;
+    centerGreet.classList.add('pop-in');
+
+    // Sync ripple + flash with each greeting drop
+    spawnRipple(g.color);
+  }
+
+  function hideGreet() {
+    centerGreet.classList.remove('pop-in');
+    centerGreet.classList.add('pop-out');
+  }
+
+  function startGreetCycle() {
+    showGreet(0);
+
+    const interval = setInterval(() => {
+      hideGreet();
+
+      setTimeout(() => {
+        cycleIndex++;
+        if (cycleIndex >= greetings.length) {
+          clearInterval(interval);
+          // Final: land on Hello with a big ripple
+          centerGreet.classList.remove('pop-out');
+          centerGreet.textContent = 'Hello';
+          centerGreet.style.color = '#4361ee';
+          void centerGreet.offsetWidth;
+          centerGreet.classList.add('pop-in');
+          spawnRipple('#4361ee');
+          // Extra ripples for emphasis
+          setTimeout(() => spawnRipple('#4361ee'), 200);
+          setTimeout(() => spawnRipple('#4361ee'), 400);
+
+          setTimeout(showName, 1200);
+          return;
+        }
+        showGreet(cycleIndex);
+      }, 200);
+    }, 350);
+  }
+
+  function showName() {
+    hideGreet();
+    setTimeout(() => {
+      centerGreet.style.display = 'none';
+      document.getElementById('nameReveal').classList.add('visible');
+      setTimeout(startTyping, 500);
+    }, 300);
+  }
+
+  const splashText = "I build things for the web.";
+  const splashTyped = document.getElementById('splashTyped');
+  let si = 0;
+  function startTyping() {
+    si = 0;
+    function typeChar() {
+      if (si < splashText.length) {
+        splashTyped.innerHTML = splashText.substring(0, si + 1) + '<span class="typing-cursor"></span>';
+        si++;
+        setTimeout(typeChar, 55);
+      } else {
+        splashTyped.innerHTML = splashText + '<span class="typing-cursor"></span>';
+        setTimeout(() => document.getElementById('splashCta').classList.add('visible'), 300);
+      }
+    }
+    typeChar();
+  }
+
+  function enterPortfolio() {
+    document.getElementById('splash').classList.add('hidden');
+    document.body.classList.add('unlocked');
+    setTimeout(() => {
+      document.getElementById('t-hero').classList.add('enter-hero');
+      document.getElementById('t-about').classList.add('enter-side');
+      document.getElementById('t-contact').classList.add('enter-bottom-1');
+      document.getElementById('t-projects').classList.add('enter-bottom-2');
+      document.getElementById('t-social').classList.add('enter-stretch');
+      setTimeout(() => document.getElementById('replayBtn').classList.add('visible'), 2000);
+    }, 400);
+  }
+
+  function replay() {
+    document.getElementById('replayBtn').classList.remove('visible');
+    document.body.classList.remove('unlocked');
+    ['t-hero','t-about','t-contact','t-projects','t-social'].forEach(id => {
+      const el = document.getElementById(id);
+      el.classList.remove('enter-hero','enter-side','enter-bottom-1','enter-bottom-2','enter-stretch');
+      el.style.opacity = '0';
+    });
+    document.getElementById('splash').classList.remove('hidden');
+    centerGreet.style.display = 'flex';
+    centerGreet.classList.remove('pop-in','pop-out');
+    centerGreet.textContent = '';
+    document.getElementById('nameReveal').classList.remove('visible');
+    document.getElementById('splashCta').classList.remove('visible');
+    splashTyped.innerHTML = '';
+    rippleContainer.innerHTML = '';
+    cycleIndex = 0;
+    setTimeout(startGreetCycle, 500);
+  }
+
+  setTimeout(startGreetCycle, 600);
+</script>
+</body>
+</html>

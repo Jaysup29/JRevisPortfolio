@@ -150,7 +150,7 @@ new class extends Component
     }
 }; ?>
 
-<div class="min-h-screen bg-[#f0f1f5] dark:bg-[#0a0a14] transition-colors duration-300 p-2 sm:p-4">
+<div class="min-h-screen transition-colors duration-300 p-2 sm:p-4">
     <!-- Splash Screen -->
     <div class="splash-overlay" id="splashOverlay">
         <div class="ripple-container" id="rippleContainer"></div>
@@ -169,14 +169,34 @@ new class extends Component
         </div>
     </div>
     <!-- Dark Mode Toggle -->
-    <button 
-        wire:click="toggleDarkMode"
+    <!-- Dark Mode Toggle -->
+    <button
+        id="darkModeToggle"
         class="dark-mode-toggle group"
         title="Toggle Dark Mode"
+        wire:ignore
     >
         <span class="block dark:hidden text-gray-700 group-hover:text-yellow-500 transition-colors">🌙</span>
         <span class="hidden dark:block text-yellow-400 group-hover:text-yellow-300 transition-colors">☀️</span>
     </button>
+    <script>
+        document.getElementById('darkModeToggle').addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var isDark = document.documentElement.classList.contains('dark');
+            if (isDark) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('darkMode', 'false');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('darkMode', 'true');
+            }
+            var nowDark = document.documentElement.classList.contains('dark');
+            if (window.__bgStyle) {
+                window.__bgStyle.textContent = 'html, body { background-color: ' + (nowDark ? '#0a0a14' : '#f0f1f5') + ' !important; }';
+            }
+        });
+    </script>
 
     <div class="max-w-7xl mx-auto">
         <!-- Portfolio Grid Layout -->
@@ -393,7 +413,7 @@ new class extends Component
             </div>
             
             <!-- Technology Stack -->
-            <div class="md:col-span-2 lg:col-span-2 lg:row-span-1 lg:row-start-2 overflow-hidden rounded-2xl scroll-reveal tile-enter-hidden" data-reveal-delay="200">
+            <div id="section-carousel" class="md:col-span-2 lg:col-span-2 lg:row-span-1 lg:row-start-2 overflow-hidden rounded-2xl scroll-reveal tile-enter-hidden" data-reveal-delay="200">
                 <div class="carousel-container relative overflow-hidden">
                     <!-- Navigation Buttons -->
                     <button class="absolute top-1/2 left-2 transform -translate-y-1/2 bg-black bg-opacity-30 hover:bg-opacity-50 text-white p-2 rounded-full transition-all duration-300 z-10" id="prevBtn">
@@ -701,21 +721,9 @@ new class extends Component
 </div>
 
 <script>
-    document.addEventListener('livewire:initialized', () => {
-        @this.on('toggle-dark-mode', () => {
-            const isDark = document.documentElement.classList.contains('dark');
-            if (isDark) {
-                document.documentElement.classList.remove('dark');
-                localStorage.setItem('darkMode', 'false');
-            } else {
-                document.documentElement.classList.add('dark');
-                localStorage.setItem('darkMode', 'true');
-            }
-        });
-    });
-
     document.addEventListener('DOMContentLoaded', function() {
         const track = document.getElementById('carouselTrack');
+        if (!track) return;
         const wrapper = track.querySelector('.carousel-wrapper');
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
@@ -855,22 +863,24 @@ new class extends Component
         });
     });
 
-    // Scroll reveal with stagger
-    const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const delay = parseInt(entry.target.dataset.revealDelay || '0');
-                setTimeout(() => {
-                    entry.target.classList.add('revealed');
-                }, delay);
-                revealObserver.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.1 });
+    // Scroll reveal with stagger — only for elements NOT handled by splash entrance
+    function initScrollReveal() {
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const delay = parseInt(entry.target.dataset.revealDelay || '0');
+                    setTimeout(() => {
+                        entry.target.classList.add('revealed');
+                    }, delay);
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
 
-    document.querySelectorAll('.scroll-reveal').forEach(el => {
-        revealObserver.observe(el);
-    });
+        document.querySelectorAll('.scroll-reveal:not(.tile-enter-hidden)').forEach(el => {
+            revealObserver.observe(el);
+        });
+    }
 
     // ===== SPLASH SCREEN =====
     const greetingsData = [
@@ -918,7 +928,9 @@ new class extends Component
 
             flashEl.classList.remove('flash');
             void flashEl.offsetWidth;
-            flashEl.style.background = 'radial-gradient(circle at center, ' + color + '11 0%, transparent 60%)';
+            var isDarkMode = document.documentElement.classList.contains('dark');
+            var flashAlpha = isDarkMode ? '11' : '30';
+            flashEl.style.background = 'radial-gradient(circle at center, ' + color + flashAlpha + ' 0%, transparent 60%)';
             flashEl.classList.add('flash');
 
             setTimeout(() => ripple.remove(), 1200);
@@ -997,24 +1009,22 @@ new class extends Component
         document.body.style.overflow = 'auto';
 
         setTimeout(() => {
+            // Remove hidden state from ALL tiles first
+            document.querySelectorAll('.tile-enter-hidden').forEach(el => {
+                el.classList.remove('tile-enter-hidden', 'scroll-reveal');
+            });
+
+            // Apply choreographed entrance to specific tiles
             const entries = [
                 { id: 'section-home', cls: 'tile-enter-hero' },
                 { id: 'section-about', cls: 'tile-enter-side' },
+                { id: 'section-carousel', cls: 'tile-enter-stretch' },
                 { id: 'section-contact', cls: 'tile-enter-bottom-1' },
                 { id: 'section-projects', cls: 'tile-enter-bottom-2' },
             ];
             entries.forEach(t => {
                 const el = document.getElementById(t.id);
-                if (el) {
-                    el.classList.remove('tile-enter-hidden');
-                    el.classList.add(t.cls);
-                }
-            });
-            // Reveal other tiles instantly
-            document.querySelectorAll('.tile-enter-hidden').forEach(el => {
-                el.classList.remove('tile-enter-hidden');
-                el.style.opacity = '1';
-                el.style.pointerEvents = 'auto';
+                if (el) el.classList.add(t.cls);
             });
 
             // Start hero typing after tiles animate in
@@ -1024,7 +1034,8 @@ new class extends Component
 
     function revealTilesInstantly() {
         document.querySelectorAll('.tile-enter-hidden').forEach(el => {
-            el.classList.remove('tile-enter-hidden');
+            el.classList.remove('tile-enter-hidden', 'scroll-reveal');
+            el.classList.add('revealed');
             el.style.opacity = '1';
             el.style.pointerEvents = 'auto';
         });
@@ -1034,6 +1045,7 @@ new class extends Component
     document.addEventListener('DOMContentLoaded', () => {
         setTimeout(initSplash, 300);
     });
+
 
     function startHeroTyping() {
         const text = "Full Stack Web Developer";
