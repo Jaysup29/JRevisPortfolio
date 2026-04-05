@@ -190,9 +190,7 @@ new class extends Component
                         <h1 class="mobile-hero-title font-bold mb-2 sm:mb-4 leading-tight">
                             JAY-AR <span class="text-portfolio-yellow dark:text-yellow-400">REVIS</span>
                         </h1>
-                        <p class="text-lg sm:text-xl lg:text-2xl mb-4 sm:mb-6 text-blue-200 dark:text-blue-300">
-                            Full Stack Web Developer 
-                        </p>
+                        <p class="text-lg sm:text-xl lg:text-2xl mb-4 sm:mb-6 text-blue-200 dark:text-blue-300" id="heroTyped"></p>
                         <p class="text-gray-300 dark:text-gray-400 leading-relaxed mobile-text max-w-2xl">
                             Passionate full-stack developer with expertise in modern web technologies. 
                             I create robust, scalable applications using Laravel, Livewire, and cutting-edge 
@@ -1036,4 +1034,22 @@ new class extends Component
     document.addEventListener('DOMContentLoaded', () => {
         setTimeout(initSplash, 300);
     });
+
+    function startHeroTyping() {
+        const text = "Full Stack Web Developer";
+        const el = document.getElementById('heroTyped');
+        if (!el || el.dataset.typed) return;
+        el.dataset.typed = 'true';
+        let i = 0;
+        function typeChar() {
+            if (i < text.length) {
+                el.innerHTML = text.substring(0, i + 1) + '<span class="typing-cursor"></span>';
+                i++;
+                setTimeout(typeChar, 80);
+            } else {
+                el.innerHTML = text + '<span class="typing-cursor"></span>';
+            }
+        }
+        typeChar();
+    }
 </script>
