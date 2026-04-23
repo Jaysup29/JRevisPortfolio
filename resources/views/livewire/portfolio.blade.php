@@ -605,17 +605,34 @@ new class extends Component
                             </div>
                             
                             <div class="flex gap-3">
-                                <button 
+                                <button
                                     type="submit"
-                                    class="flex-1 bg-green-800 dark:bg-green-900 hover:bg-green-900 dark:hover:bg-green-800 text-white py-2 px-4 rounded font-medium transition-all flex items-center justify-center gap-2"
+                                    wire:loading.attr="disabled"
+                                    wire:target="submitContactForm"
+                                    class="flex-1 bg-green-800 dark:bg-green-900 hover:bg-green-900 dark:hover:bg-green-800 disabled:opacity-70 disabled:cursor-not-allowed text-white py-2 px-4 rounded font-medium transition-all flex items-center justify-center gap-2"
                                 >
-                                    <span>Send Message</span>
-                                    <span class="text-sm">🚀</span>
+                                    {{-- Default state --}}
+                                    <span wire:loading.remove wire:target="submitContactForm" class="flex items-center gap-2">
+                                        <span>Send Message</span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.125A59.769 59.769 0 0121.485 12 59.768 59.768 0 013.27 20.875L5.999 12zm0 0h7.5" />
+                                        </svg>
+                                    </span>
+                                    {{-- Loading state --}}
+                                    <span wire:loading wire:target="submitContactForm" class="flex items-center gap-2">
+                                        <svg class="animate-spin w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                        <span>Sending…</span>
+                                    </span>
                                 </button>
                                 <button
                                     type="button"
                                     @click="showForm = false"
-                                    class="bg-green-700 hover:bg-green-800 text-white py-2 px-4 rounded font-medium transition-all"
+                                    wire:loading.attr="disabled"
+                                    wire:target="submitContactForm"
+                                    class="bg-green-700 hover:bg-green-800 disabled:opacity-50 disabled:cursor-not-allowed text-white py-2 px-4 rounded font-medium transition-all"
                                 >
                                     Cancel
                                 </button>
