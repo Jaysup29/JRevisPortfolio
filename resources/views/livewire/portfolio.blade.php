@@ -4,12 +4,15 @@ use Livewire\Volt\Component;
 use Illuminate\Support\Collection;
 use App\Models\Skill;
 use App\Models\Project;
+use App\Models\Certification;
 use App\Mail\ContactFormMail;
 
 new class extends Component
 {
     public $activeSection = 'about';
     public $projects = [];
+    public $certifications = [];
+    public ?int $flippedCertId = null;
     public $technologies = [];
     public $darkMode = false;
     public $showLogin = false;
@@ -27,7 +30,18 @@ new class extends Component
 
         $this->loadTechnologies();
         $this->loadProjects();
+        $this->loadCertifications();
 
+    }
+
+    private function loadCertifications()
+    {
+        $this->certifications = Certification::active()->ordered()->get()->toArray();
+    }
+
+    public function flipCert(int $id): void
+    {
+        $this->flippedCertId = $this->flippedCertId === $id ? null : $id;
     }
 
 
