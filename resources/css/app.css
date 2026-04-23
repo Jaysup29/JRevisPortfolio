@@ -4,6 +4,22 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+    /* Certifications tile */
+    --cert-tile-bg: #4c3b9c;
+    --cert-card-bg: rgba(255, 255, 255, 0.10);
+    --cert-card-bg-light: rgba(255, 255, 255, 0.60);
+    --cert-card-border: rgba(255, 255, 255, 0.20);
+
+    /* Let's Connect — amber CTA */
+    --cta-amber: #f59e0b;
+    --cta-amber-hover: #d97706;
+
+    /* Grid proportions */
+    --tile-projects-min-h: 520px;
+    --tile-certs-min-h: 280px;
+}
+
 [x-cloak] {
     display: none !important;
 }
