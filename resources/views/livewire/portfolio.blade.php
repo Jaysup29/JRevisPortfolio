@@ -211,7 +211,7 @@ new class extends Component
         <div class="mobile-grid">
             
             <!-- Main Hero Section -->
-            <div id="section-home" class="lg:row-span-1 lg:row-start-1 md:col-span-2 lg:col-span-2 scroll-reveal tile-enter-hidden" data-reveal-delay="0">
+            <div id="section-home" class="lg:row-span-1 lg:row-start-1 md:col-span-2 lg:col-span-2" data-reveal-delay="0">
                 <div class="portfolio-card-colored bg-portfolio-dark dark:bg-gray-800 text-white h-full min-h-[300px] sm:min-h-[400px] relative overflow-hidden">
                     <div class="tile-glow" id="glow-hero"></div>
                     <div class="relative z-10 h-full flex flex-col justify-center">
@@ -298,7 +298,7 @@ new class extends Component
                 x-init="startAutoRotate()"
                 @mouseenter="stopAutoRotate()" 
                 @mouseleave="startAutoRotate()"
-                class="relative lg:row-span-1 lg:row-start-1 lg:row-end-3 portfolio-card-colored bg-portfolio-blue dark:bg-blue-600 text-white min-h-[480px] sm:min-h-[400px] lg:min-h-[500px] flex items-center justify-center scroll-reveal tile-enter-hidden"
+                class="relative lg:row-span-1 lg:row-start-1 lg:row-end-3 portfolio-card-colored bg-portfolio-blue dark:bg-blue-600 text-white min-h-[480px] sm:min-h-[400px] lg:min-h-[500px] flex items-center justify-center"
                 data-reveal-delay="100"
             >
                 <div class="tile-glow tile-glow-white" id="glow-about"></div>
@@ -426,7 +426,7 @@ new class extends Component
             </div>
             
             <!-- Technology Stack -->
-            <div id="section-carousel" class="md:col-span-2 lg:col-span-2 lg:row-span-1 lg:row-start-2 overflow-hidden rounded-2xl scroll-reveal tile-enter-hidden" data-reveal-delay="200">
+            <div id="section-carousel" class="md:col-span-2 lg:col-span-2 lg:row-span-1 lg:row-start-2 overflow-hidden rounded-2xl" data-reveal-delay="200">
                 <div class="carousel-container relative overflow-hidden">
                     <!-- Navigation Buttons -->
                     <button class="absolute top-1/2 left-2 transform -translate-y-1/2 bg-black bg-opacity-30 hover:bg-opacity-50 text-white p-2 rounded-full transition-all duration-300 z-10" id="prevBtn">
@@ -473,7 +473,7 @@ new class extends Component
             </div>
 
             <!-- Contact Section -->
-            <div id="section-contact" class=" lg:row-start-3 lg:row-end-5 portfolio-card-colored bg-portfolio-green dark:bg-green-600 text-white min-h-[250px] sm:min-h-[300px] flex items-center justify-center scroll-reveal tile-enter-hidden" data-reveal-delay="300">
+            <div id="section-contact" class=" lg:row-start-3 lg:row-end-5 portfolio-card-colored bg-portfolio-green dark:bg-green-600 text-white min-h-[250px] sm:min-h-[300px] flex items-center justify-center" data-reveal-delay="300">
                 <div class="tile-glow tile-glow-white" id="glow-contact"></div>
                 <div class="h-full flex flex-col p-4 sm:p-6">
                     <!-- Status pill: always-on availability signal -->
@@ -653,7 +653,7 @@ new class extends Component
             </div>
 
             <!-- Projects Section -->
-            <div id="section-projects" class="lg:row-start-3 lg:row-end-4 md:col-span-2 lg:col-span-2 portfolio-card-colored bg-portfolio-red dark:bg-red-600 text-white min-h-[520px] scroll-reveal tile-enter-hidden" data-reveal-delay="400">
+            <div id="section-projects" class="lg:row-start-3 lg:row-end-4 md:col-span-2 lg:col-span-2 portfolio-card-colored bg-portfolio-red dark:bg-red-600 text-white min-h-[520px]" data-reveal-delay="400">
                 <div class="tile-glow tile-glow-white" id="glow-projects"></div>
                 <div class="h-full flex flex-col">
                     <h3 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6 sm:mb-8 text-center">PROJECTS</h3>
@@ -688,7 +688,7 @@ new class extends Component
 
             <!-- Certifications Section -->
             <div id="section-certifications"
-                 class="lg:col-span-2 lg:row-start-4 lg:row-end-5 portfolio-card-colored mb-8 lg:mb-0 scroll-reveal tile-enter-hidden"
+                 class="lg:col-span-2 lg:row-start-4 lg:row-end-5 portfolio-card-colored mb-8 lg:mb-0"
                  style="background-color: var(--cert-tile-bg); min-height: var(--tile-certs-min-h);"
                  data-reveal-delay="500">
                 <div class="tile-glow tile-glow-white" id="glow-certs"></div>
