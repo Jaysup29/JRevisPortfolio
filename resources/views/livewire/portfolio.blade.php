@@ -16,7 +16,6 @@ new class extends Component
     public $darkMode = false;
     public $showLogin = false;
     public $showLoginCount = 0;
-    public $showContactForm = false;
     public $contactForm = [
         'name' => '',
         'email' => '',
@@ -134,11 +133,6 @@ new class extends Component
         
     }
 
-    public function toggleContactForm()
-    {
-        $this->showContactForm = !$this->showContactForm;
-    }
-
     public function submitContactForm()
     {
         $this->validate([
@@ -149,12 +143,13 @@ new class extends Component
         ]);
 
         Mail::To('jrevis029@gmail.com')->send(new ContactFormMail($this->contactForm));
-        
-        // Here you would typically send an email or save to database
+
         session()->flash('message', 'Thank you for your message! I\'ll get back to you soon.');
-        
+
         $this->contactForm = ['name' => '', 'email' => '', 'subject' => '', 'message' => ''];
-        $this->showContactForm = false;
+
+        // Tell Alpine on the tile to close the form panel.
+        $this->dispatch('contact-form-submitted');
     }
 }; ?>
 
@@ -495,9 +490,12 @@ new class extends Component
                             {{ session('message') }}
                         </div>
                     @endif
-                    
-                    @if(!$showContactForm)
-                        <!-- Contact Information -->
+
+                    <div x-data="{ showForm: false }"
+                         @contact-form-submitted.window="showForm = false"
+                         class="flex-1 flex flex-col">
+                    <!-- Contact Information -->
+                    <div x-show="!showForm">
                         <div class="space-y-6 mb-6">
                             <!-- Primary Contact -->
                             <div class="bg-green-700 dark:bg-green-800 bg-opacity-50 rounded-lg p-4">
@@ -546,7 +544,8 @@ new class extends Component
 
                         <!-- Contact Form Toggle Button -->
                         <button
-                            wire:click="toggleContactForm"
+                            type="button"
+                            @click="showForm = true"
                             class="w-full py-3 px-4 rounded-lg font-semibold transition-all hover:scale-105 flex items-center justify-center gap-2 shadow-lg"
                             style="background-color: var(--cta-amber); color: #1a1a2e;"
                             onmouseover="this.style.backgroundColor='var(--cta-amber-hover)'"
@@ -557,8 +556,10 @@ new class extends Component
                             </svg>
                             Send Message
                         </button>
-                    @else
-                        <!-- Contact Form -->
+                    </div>
+
+                    <!-- Contact Form -->
+                    <div x-show="showForm" x-cloak>
                         <form wire:submit.prevent="submitContactForm" class="space-y-4 flex-1">
                             <div>
                                 <label class="block text-green-100 text-sm font-medium mb-1">Name *</label>
@@ -611,16 +612,17 @@ new class extends Component
                                     <span>Send Message</span>
                                     <span class="text-sm">🚀</span>
                                 </button>
-                                <button 
+                                <button
                                     type="button"
-                                    wire:click="toggleContactForm"
+                                    @click="showForm = false"
                                     class="bg-green-700 hover:bg-green-800 text-white py-2 px-4 rounded font-medium transition-all"
                                 >
                                     Cancel
                                 </button>
                             </div>
                         </form>
-                    @endif
+                    </div>
+                    </div>
 
                     <!-- Connect elsewhere — social brand icons -->
                     <div class="mt-6 pt-4 border-t border-green-500/40">
