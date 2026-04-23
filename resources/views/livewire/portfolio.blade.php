@@ -683,14 +683,14 @@ new class extends Component
 
             <!-- Certifications Section -->
             <div id="section-certifications"
-                 class="lg:col-span-2 lg:row-start-4 lg:row-end-5 portfolio-card-colored text-white mb-8 lg:mb-0 scroll-reveal tile-enter-hidden"
+                 class="lg:col-span-2 lg:row-start-4 lg:row-end-5 portfolio-card-colored mb-8 lg:mb-0 scroll-reveal tile-enter-hidden"
                  style="background-color: var(--cert-tile-bg); min-height: var(--tile-certs-min-h);"
                  data-reveal-delay="500">
                 <div class="tile-glow tile-glow-white" id="glow-certs"></div>
                 <div class="h-full flex flex-col p-4 sm:p-6">
                     <div class="text-center mb-4 sm:mb-6">
-                        <h3 class="text-2xl sm:text-3xl font-bold mb-2">CERTIFICATIONS</h3>
-                        <div class="w-16 h-1 bg-white/60 mx-auto rounded-full"></div>
+                        <h3 class="cert-title text-2xl sm:text-3xl font-bold mb-2">CERTIFICATIONS</h3>
+                        <div class="cert-title-underline w-16 h-1 mx-auto rounded-full"></div>
                     </div>
 
                     <div x-data="{ flippedId: null }" class="flex-1 flex flex-col">
@@ -710,22 +710,22 @@ new class extends Component
                                             @if (!empty($cert['icon_path']))
                                                 <img src="{{ asset($cert['icon_path']) }}" alt="" class="w-10 h-10 object-contain mb-2" />
                                             @else
-                                                <div class="w-10 h-10 rounded bg-white/10 flex items-center justify-center mb-2">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white/70" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                                <div class="cert-bg-soft w-10 h-10 rounded flex items-center justify-center mb-2">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="cert-text-subtle w-6 h-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                                                         <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 01-.982-3.172M9.497 14.25a7.454 7.454 0 00.981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 007.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 002.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 012.916.52 6.003 6.003 0 01-5.395 4.972m0 0a6.726 6.726 0 01-2.749 1.35m0 0a6.772 6.772 0 01-3.044 0" />
                                                     </svg>
                                                 </div>
                                             @endif
-                                            <h4 class="font-bold text-sm sm:text-base leading-tight mb-1 line-clamp-2">{{ $cert['name'] }}</h4>
-                                            <p class="text-xs sm:text-sm text-white/80 line-clamp-1">{{ $cert['issuer'] }}</p>
+                                            <h4 class="cert-text-primary font-bold text-sm sm:text-base leading-tight mb-1 line-clamp-2">{{ $cert['name'] }}</h4>
+                                            <p class="cert-text-muted text-xs sm:text-sm line-clamp-1">{{ $cert['issuer'] }}</p>
                                         </div>
                                         <div class="mt-2">
-                                            <span class="inline-block px-2 py-0.5 rounded-full text-xs bg-white/15">
+                                            <span class="cert-pill-bg cert-text-primary inline-block px-2 py-0.5 rounded-full text-xs">
                                                 {{ \Carbon\Carbon::parse($cert['issued_at'])->format('M Y') }}
                                             </span>
                                         </div>
                                         <!-- Flip-hint indicator -->
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 absolute top-3 right-3 text-white/50" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="cert-text-subtle w-4 h-4 absolute top-3 right-3" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
                                         </svg>
                                     </div>
@@ -733,11 +733,11 @@ new class extends Component
                                     <!-- Back face -->
                                     <div class="cert-card-face cert-card-face--back overflow-y-auto">
                                         <div>
-                                            <p class="text-xs sm:text-sm leading-relaxed">{{ $cert['description'] }}</p>
+                                            <p class="cert-text-primary text-xs sm:text-sm leading-relaxed">{{ $cert['description'] }}</p>
                                         </div>
-                                        <div class="mt-3 pt-2 border-t border-white/20 text-xs text-white/70 flex items-center justify-between">
+                                        <div class="cert-divider-border cert-text-muted mt-3 pt-2 border-t text-xs flex items-center justify-between">
                                             <span>{{ $cert['issuer'] }} · {{ \Carbon\Carbon::parse($cert['issued_at'])->format('M Y') }}</span>
-                                            <span class="inline-flex items-center gap-1 text-white/60">
+                                            <span class="cert-text-subtle inline-flex items-center gap-1">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
                                                 </svg>

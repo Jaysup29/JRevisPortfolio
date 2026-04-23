@@ -5,11 +5,18 @@
 @tailwind utilities;
 
 :root {
-    /* Certifications tile */
+    /* Certifications tile — dark mode palette (default) */
     --cert-tile-bg: #4c3b9c;
     --cert-card-bg: rgba(255, 255, 255, 0.10);
-    --cert-card-bg-light: rgba(255, 255, 255, 0.60);
-    --cert-card-border: rgba(255, 255, 255, 0.20);
+    --cert-card-border: rgba(255, 255, 255, 0.25);
+    --cert-card-text: #ffffff;
+    --cert-card-text-muted: rgba(255, 255, 255, 0.80);
+    --cert-card-text-subtle: rgba(255, 255, 255, 0.60);
+    --cert-card-inner-bg: rgba(255, 255, 255, 0.10);
+    --cert-card-pill-bg: rgba(255, 255, 255, 0.15);
+    --cert-card-divider: rgba(255, 255, 255, 0.20);
+    --cert-title: #ffffff;
+    --cert-title-underline: rgba(255, 255, 255, 0.60);
 
     /* Let's Connect — amber CTA */
     --cta-amber: #f59e0b;
@@ -18,6 +25,21 @@
     /* Grid proportions */
     --tile-projects-min-h: 520px;
     --tile-certs-min-h: 280px;
+}
+
+/* Certifications tile — light mode palette */
+html:not(.dark) {
+    --cert-tile-bg: #7c3aed;                               /* lighter violet for energy */
+    --cert-card-bg: rgba(255, 255, 255, 0.95);             /* near-solid white cards */
+    --cert-card-border: rgba(255, 255, 255, 0.95);
+    --cert-card-text: #1a1a2e;                             /* dark navy text */
+    --cert-card-text-muted: rgba(26, 26, 46, 0.80);
+    --cert-card-text-subtle: rgba(26, 26, 46, 0.60);
+    --cert-card-inner-bg: rgba(124, 58, 237, 0.12);        /* soft violet for icon frame / accents */
+    --cert-card-pill-bg: rgba(124, 58, 237, 0.15);
+    --cert-card-divider: rgba(26, 26, 46, 0.20);
+    --cert-title: #ffffff;                                  /* title stays white — tile is purple */
+    --cert-title-underline: rgba(255, 255, 255, 0.80);
 }
 
 [x-cloak] {
@@ -747,25 +769,22 @@ html:not(.dark) .splash-cta button:hover {
     border-radius: 0.5rem;
     background-color: var(--cert-card-bg);
     border: 1px solid var(--cert-card-border);
-    color: #ffffff;
+    color: var(--cert-card-text);
 }
 
 .cert-card-face--back {
     transform: rotateY(180deg);
-    background-color: var(--cert-card-bg);
-    border: 1px solid var(--cert-card-border);
 }
 
-/* Light-mode contrast bump for the frosted cards */
-html:not(.dark) .cert-card {
-    background-color: var(--cert-card-bg-light) !important;
-    color: #1a1a2e;
-}
-
-html:not(.dark) .cert-card-face--back {
-    background-color: var(--cert-card-bg-light);
-    color: #1a1a2e;
-}
+/* Cert-scoped utility classes — use var() so they flip in light mode automatically */
+.cert-text-primary { color: var(--cert-card-text); }
+.cert-text-muted { color: var(--cert-card-text-muted); }
+.cert-text-subtle { color: var(--cert-card-text-subtle); }
+.cert-bg-soft { background-color: var(--cert-card-inner-bg); }
+.cert-pill-bg { background-color: var(--cert-card-pill-bg); }
+.cert-divider-border { border-color: var(--cert-card-divider); }
+.cert-title { color: var(--cert-title); }
+.cert-title-underline { background-color: var(--cert-title-underline); }
 
 /* Respect reduced motion */
 @media (prefers-reduced-motion: reduce) {
