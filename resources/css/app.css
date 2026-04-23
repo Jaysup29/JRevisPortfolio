@@ -620,9 +620,9 @@
 }
 
 .splash-cta button {
-  background: rgba(67, 97, 238, 0.15);
-  border: 2px solid rgba(67, 97, 238, 0.5);
-  color: white;
+  background: rgba(67, 97, 238, 0.35);
+  border: 2px solid rgba(147, 170, 255, 0.9);
+  color: #ffffff;
   padding: 16px 44px;
   border-radius: 100px;
   font-size: 16px;
@@ -632,14 +632,16 @@
   transition: all 0.4s ease;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 0 20px rgba(67, 97, 238, 0.15);
+  box-shadow: 0 0 30px rgba(67, 97, 238, 0.4);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
 }
 
-:not(.dark) .splash-cta button {
+html:not(.dark) .splash-cta button {
   background: rgba(67, 97, 238, 0.1);
   border-color: rgba(67, 97, 238, 0.4);
   color: #1a1a2e;
   box-shadow: 0 0 20px rgba(67, 97, 238, 0.1);
+  text-shadow: none;
 }
 
 .splash-cta button::before {
@@ -660,7 +662,7 @@
   transform: translateY(-3px);
 }
 
-:not(.dark) .splash-cta button:hover {
+html:not(.dark) .splash-cta button:hover {
   background: rgba(67, 97, 238, 0.15);
   box-shadow: 0 0 40px rgba(67, 97, 238, 0.2);
 }
