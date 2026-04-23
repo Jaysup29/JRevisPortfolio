@@ -494,13 +494,21 @@ new class extends Component
                     </div>
 
                     @if(session('message'))
-                        <div class="bg-green-700 border border-green-500 text-green-100 px-4 py-3 rounded mb-4">
+                        <div x-data="{ show: true }"
+                             x-init="setTimeout(() => show = false, 3000)"
+                             x-show="show"
+                             x-transition.opacity.duration.500ms
+                             class="bg-green-700 border border-green-500 text-green-100 px-4 py-3 rounded mb-4">
                             {{ session('message') }}
                         </div>
                     @endif
 
                     @if(session('error'))
-                        <div class="bg-red-900/60 border border-red-400/60 text-red-100 px-4 py-3 rounded mb-4 text-sm">
+                        <div x-data="{ show: true }"
+                             x-init="setTimeout(() => show = false, 3000)"
+                             x-show="show"
+                             x-transition.opacity.duration.500ms
+                             class="bg-red-900/60 border border-red-400/60 text-red-100 px-4 py-3 rounded mb-4 text-sm">
                             {{ session('error') }}
                         </div>
                     @endif
