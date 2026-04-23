@@ -590,7 +590,7 @@ new class extends Component
             </div>
 
             <!-- Projects Section -->
-            <div id="section-projects" class="lg:row-start-3 lg:row-end-4 md:col-span-2 lg:col-span-2 portfolio-card-colored bg-portfolio-red dark:bg-red-600 text-white min-h-[300px] scroll-reveal tile-enter-hidden" data-reveal-delay="400">
+            <div id="section-projects" class="lg:row-start-3 lg:row-end-4 md:col-span-2 lg:col-span-2 portfolio-card-colored bg-portfolio-red dark:bg-red-600 text-white min-h-[520px] scroll-reveal tile-enter-hidden" data-reveal-delay="400">
                 <div class="tile-glow tile-glow-white" id="glow-projects"></div>
                 <div class="h-full flex flex-col">
                     <h3 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-6 sm:mb-8 text-center">PROJECTS</h3>
