@@ -474,7 +474,7 @@ new class extends Component
             </div>
 
             <!-- Contact Section -->
-            <div id="section-contact" class=" lg:row-start-3 lg:row-end-5 portfolio-card-colored bg-portfolio-green dark:bg-green-600 text-white min-h-[250px] sm:min-h-[300px] flex items-center justify-center" data-reveal-delay="300">
+            <div id="section-contact" class=" lg:row-start-3 lg:row-end-5 portfolio-card-colored bg-portfolio-green dark:bg-green-600 text-white min-h-[250px] sm:min-h-[300px]" data-reveal-delay="300">
                 <div class="tile-glow tile-glow-white" id="glow-contact"></div>
                 <div class="h-full flex flex-col p-4 sm:p-6">
                     <!-- Status pill: always-on availability signal -->
@@ -503,7 +503,8 @@ new class extends Component
                         </div>
                     @endif
 
-                    <div x-data="{ showForm: false }"
+                    <div wire:key="contact-panel"
+                         x-data="{ showForm: false }"
                          @contact-form-submitted.window="showForm = false"
                          class="flex-1 flex flex-col">
                     <!-- Contact Information -->
@@ -571,7 +572,7 @@ new class extends Component
                     </div>
 
                     <!-- Contact Form -->
-                    <div x-show="showForm" x-cloak>
+                    <div x-show="showForm">
                         <form wire:submit.prevent="submitContactForm" class="space-y-4 flex-1">
                             <div>
                                 <label class="block text-green-100 text-sm font-medium mb-1">Name *</label>
