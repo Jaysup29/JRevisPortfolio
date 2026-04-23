@@ -160,8 +160,10 @@ new class extends Component
 }; ?>
 
 <div class="min-h-screen transition-colors duration-300 p-2 sm:p-4">
-    <!-- Splash Screen -->
-    <div class="splash-overlay" id="splashOverlay">
+    <!-- Splash Screen (wire:ignore so Livewire never re-morphs the .hidden class
+         that enterPortfolio() adds on splash dismiss — otherwise the splash
+         re-appears over the page on every wire:submit / wire:click) -->
+    <div class="splash-overlay" id="splashOverlay" wire:ignore>
         <div class="ripple-container" id="rippleContainer"></div>
         <div class="splash-flash" id="splashFlash"></div>
         <!-- Greeting text: absolutely centered at ripple origin -->
