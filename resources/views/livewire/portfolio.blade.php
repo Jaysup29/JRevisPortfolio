@@ -463,6 +463,14 @@ new class extends Component
             <div id="section-contact" class=" lg:row-start-3 lg:row-end-5 portfolio-card-colored bg-portfolio-green dark:bg-green-600 text-white min-h-[250px] sm:min-h-[300px] flex items-center justify-center scroll-reveal tile-enter-hidden" data-reveal-delay="300">
                 <div class="tile-glow tile-glow-white" id="glow-contact"></div>
                 <div class="h-full flex flex-col p-4 sm:p-6">
+                    <!-- Status pill: always-on availability signal -->
+                    <div class="flex justify-center mb-4">
+                        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-900/60 border border-green-400/40 text-green-100 text-xs sm:text-sm font-semibold">
+                            <span class="w-2 h-2 rounded-full bg-green-300 animate-pulse"></span>
+                            Available for freelance projects
+                        </span>
+                    </div>
+
                     <div class="text-center mb-6">
                         <h3 class="text-3xl sm:text-4xl font-bold mb-2">LET'S CONNECT</h3>
                         <div class="w-16 h-1 bg-green-200 mx-auto rounded-full"></div>
