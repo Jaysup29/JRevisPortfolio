@@ -623,48 +623,6 @@ new class extends Component
                 </div>
             </div>
 
-            <!-- Social Links -->
-            <div class="lg:col-span-2 lg:row-start-4 lg:row-end-5 portfolio-card-colored bg-portfolio-yellow dark:bg-yellow-500 text-gray-800 dark:text-gray-900 mb-8 lg:mb-0 scroll-reveal tile-enter-hidden" data-reveal-delay="500">
-                <div class="tile-glow tile-glow-white" id="glow-social"></div>
-                <div class="text-center">
-                    <h3 class="text-xl sm:text-2xl font-bold mb-6 sm:mb-8 text-gray-700 dark:text-gray-800">Connect With Me</h3>
-                    
-                    <!-- Social Icons Grid for Mobile -->
-                    <div class="grid grid-cols-3 gap-4 sm:flex sm:justify-center sm:space-x-6 mb-6 sm:mb-8">
-                        <a href="https://github.com" class="social-icon hover:text-gray-600 dark:hover:text-gray-700 flex flex-col items-center gap-1" title="GitHub">
-                            <span class="text-2xl sm:text-3xl">🐙</span>
-                            <span class="text-xs sm:hidden">GitHub</span>
-                        </a>
-                        <a href="https://linkedin.com" class="social-icon hover:text-blue-600 dark:hover:text-blue-700 flex flex-col items-center gap-1" title="LinkedIn">
-                            <span class="text-2xl sm:text-3xl">💼</span>
-                            <span class="text-xs sm:hidden">LinkedIn</span>
-                        </a>
-                        <a href="https://facebook.com" class="social-icon hover:text-blue-500 dark:hover:text-blue-600 flex flex-col items-center gap-1" title="Facebook">
-                            <span class="text-2xl sm:text-3xl">📘</span>
-                            <span class="text-xs sm:hidden">Facebook</span>
-                        </a>
-                        <a href="https://instagram.com" class="social-icon hover:text-pink-500 dark:hover:text-pink-600 flex flex-col items-center gap-1 sm:block" title="Instagram">
-                            <span class="text-2xl sm:text-3xl">📷</span>
-                            <span class="text-xs sm:hidden">Instagram</span>
-                        </a>
-                        <a href="https://twitter.com" class="social-icon hover:text-blue-400 dark:hover:text-blue-500 flex flex-col items-center gap-1 sm:block" title="Twitter">
-                            <span class="text-2xl sm:text-3xl">🐦</span>
-                            <span class="text-xs sm:hidden">Twitter</span>
-                        </a>
-                        <a href="mailto:jay.revis@email.com" class="social-icon hover:text-red-500 dark:hover:text-red-600 flex flex-col items-center gap-1 sm:block" title="Email">
-                            <span class="text-2xl sm:text-3xl">✉️</span>
-                            <span class="text-xs sm:hidden">Email</span>
-                        </a>
-                    </div>
-                    
-                    <div class="text-center">
-                        <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-700 mb-2">Currently Available For</div>
-                        <div class="inline-block bg-green-500 dark:bg-green-600 text-white px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold animate-bounce-gentle">
-                            ✨ Freelance Projects
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
 
         <!-- Mobile Navigation Bar (Sticky Bottom) -->
