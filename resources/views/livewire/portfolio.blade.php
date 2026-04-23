@@ -701,36 +701,67 @@ new class extends Component
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 flex-1">
                         @foreach ($certifications as $cert)
+                            @php $isFlipped = $flippedCertId === $cert['id']; @endphp
                             <button type="button"
                                     wire:click="flipCert({{ $cert['id'] }})"
-                                    aria-expanded="{{ $flippedCertId === $cert['id'] ? 'true' : 'false' }}"
-                                    aria-label="Certification: {{ $cert['name'] }}. Click to {{ $flippedCertId === $cert['id'] ? 'hide' : 'show' }} description."
-                                    class="cert-card text-left rounded-lg p-4 flex flex-col justify-between relative transition-transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-white/60"
-                                    style="background-color: var(--cert-card-bg); border: 1px solid var(--cert-card-border); min-height: 180px;">
-                                <div>
-                                    @if (!empty($cert['icon_path']))
-                                        <img src="{{ asset($cert['icon_path']) }}" alt="" class="w-10 h-10 object-contain mb-2" />
-                                    @else
-                                        <div class="w-10 h-10 rounded bg-white/10 flex items-center justify-center mb-2">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white/70" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
-                                            </svg>
+                                    aria-expanded="{{ $isFlipped ? 'true' : 'false' }}"
+                                    aria-label="Certification: {{ $cert['name'] }}. Click to {{ $isFlipped ? 'hide' : 'show' }} description."
+                                    class="cert-card text-left rounded-lg relative transition-transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-white/60 {{ $isFlipped ? 'is-flipped' : '' }}"
+                                    style="background-color: transparent; min-height: 200px;">
+                                <div class="cert-card-inner">
+                                    <!-- Front face -->
+                                    <div class="cert-card-face"
+                                         style="background-color: var(--cert-card-bg); border: 1px solid var(--cert-card-border);">
+                                        <div>
+                                            @if (!empty($cert['icon_path']))
+                                                <img src="{{ asset($cert['icon_path']) }}" alt="" class="w-10 h-10 object-contain mb-2" />
+                                            @else
+                                                <div class="w-10 h-10 rounded bg-white/10 flex items-center justify-center mb-2">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-white/70" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
+                                                    </svg>
+                                                </div>
+                                            @endif
+                                            <h4 class="font-bold text-sm sm:text-base leading-tight mb-1 line-clamp-2">{{ $cert['name'] }}</h4>
+                                            <p class="text-xs sm:text-sm text-white/80 line-clamp-1">{{ $cert['issuer'] }}</p>
                                         </div>
-                                    @endif
-                                    <h4 class="font-bold text-sm sm:text-base leading-tight mb-1 line-clamp-2">{{ $cert['name'] }}</h4>
-                                    <p class="text-xs sm:text-sm text-white/80 line-clamp-1">{{ $cert['issuer'] }}</p>
+                                        <div class="mt-2">
+                                            <span class="inline-block px-2 py-0.5 rounded-full text-xs bg-white/15">
+                                                {{ \Carbon\Carbon::parse($cert['issued_at'])->format('M Y') }}
+                                            </span>
+                                        </div>
+                                        <!-- Flip-hint indicator -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 absolute top-3 right-3 text-white/50" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+                                        </svg>
+                                    </div>
+
+                                    <!-- Back face -->
+                                    <div class="cert-card-face cert-card-face--back overflow-y-auto">
+                                        <div>
+                                            <p class="text-xs sm:text-sm leading-relaxed">{{ $cert['description'] }}</p>
+                                        </div>
+                                        <div class="mt-3 pt-2 border-t border-white/20 text-xs text-white/70 flex items-center justify-between">
+                                            <span>{{ $cert['issuer'] }} · {{ \Carbon\Carbon::parse($cert['issued_at'])->format('M Y') }}</span>
+                                            <span class="inline-flex items-center gap-1 text-white/60">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                                                </svg>
+                                                Back
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="mt-2">
-                                    <span class="inline-block px-2 py-0.5 rounded-full text-xs bg-white/15">
-                                        {{ \Carbon\Carbon::parse($cert['issued_at'])->format('M Y') }}
-                                    </span>
-                                </div>
-                                <!-- Flip-hint indicator -->
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 absolute top-2 right-2 text-white/50" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
-                                </svg>
                             </button>
                         @endforeach
+                    </div>
+
+                    <div aria-live="polite" class="sr-only">
+                        @if ($flippedCertId)
+                            Card flipped to show description.
+                        @else
+                            All cards showing front.
+                        @endif
                     </div>
                 </div>
             </div>
