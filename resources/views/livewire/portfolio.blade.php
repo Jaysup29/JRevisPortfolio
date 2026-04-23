@@ -706,12 +706,11 @@ new class extends Component
                                     wire:click="flipCert({{ $cert['id'] }})"
                                     aria-expanded="{{ $isFlipped ? 'true' : 'false' }}"
                                     aria-label="Certification: {{ $cert['name'] }}. Click to {{ $isFlipped ? 'hide' : 'show' }} description."
-                                    class="cert-card text-left rounded-lg relative transition-transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-white/60 {{ $isFlipped ? 'is-flipped' : '' }}"
-                                    style="background-color: transparent; min-height: 200px;">
+                                    class="cert-card text-left rounded-lg transition-transform duration-300 hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-white/60 {{ $isFlipped ? 'is-flipped' : '' }}"
+                                    style="height: 220px;">
                                 <div class="cert-card-inner">
                                     <!-- Front face -->
-                                    <div class="cert-card-face"
-                                         style="background-color: var(--cert-card-bg); border: 1px solid var(--cert-card-border);">
+                                    <div class="cert-card-face">
                                         <div>
                                             @if (!empty($cert['icon_path']))
                                                 <img src="{{ asset($cert['icon_path']) }}" alt="" class="w-10 h-10 object-contain mb-2" />

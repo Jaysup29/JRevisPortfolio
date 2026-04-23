@@ -714,14 +714,19 @@ html:not(.dark) .splash-cta button:hover {
 /* Certification flip cards */
 .cert-card {
     perspective: 1000px;
-    transform-style: preserve-3d;
     position: relative;
+    display: block;
+    overflow: visible;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
 }
 
 .cert-card-inner {
     position: relative;
     width: 100%;
     height: 100%;
+    min-height: inherit;
     transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     transform-style: preserve-3d;
 }
@@ -740,6 +745,9 @@ html:not(.dark) .splash-cta button:hover {
     flex-direction: column;
     justify-content: space-between;
     border-radius: 0.5rem;
+    background-color: var(--cert-card-bg);
+    border: 1px solid var(--cert-card-border);
+    color: #ffffff;
 }
 
 .cert-card-face--back {
