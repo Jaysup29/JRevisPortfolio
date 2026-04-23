@@ -515,7 +515,7 @@ new class extends Component
                                         <span class="text-lg">📍</span>
                                         <div>
                                             <div class="font-medium">Location</div>
-                                            <span class="text-green-200 text-sm">Philippines (Remote Available)</span>
+                                            <span class="text-green-200 text-sm">Tondo, Manila · Remote Available</span>
                                         </div>
                                     </div>
                                 </div>
