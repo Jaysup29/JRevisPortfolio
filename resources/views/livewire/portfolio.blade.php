@@ -532,11 +532,16 @@ new class extends Component
                         </div>
 
                         <!-- Contact Form Toggle Button -->
-                        <button 
+                        <button
                             wire:click="toggleContactForm"
-                            class="w-full bg-green-800 dark:bg-green-900 hover:bg-green-900 dark:hover:bg-green-800 text-white py-3 px-4 rounded-lg font-semibold transition-all hover:scale-105 flex items-center justify-center gap-2"
+                            class="w-full py-3 px-4 rounded-lg font-semibold transition-all hover:scale-105 flex items-center justify-center gap-2 shadow-lg"
+                            style="background-color: var(--cta-amber); color: #1a1a2e;"
+                            onmouseover="this.style.backgroundColor='var(--cta-amber-hover)'"
+                            onmouseout="this.style.backgroundColor='var(--cta-amber)'"
                         >
-                            <span class="text-lg">✉️</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.125A59.769 59.769 0 0121.485 12 59.768 59.768 0 013.27 20.875L5.999 12zm0 0h7.5" />
+                            </svg>
                             Send Message
                         </button>
                     @else
