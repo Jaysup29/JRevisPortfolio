@@ -12,7 +12,6 @@ new class extends Component
     public $activeSection = 'about';
     public $projects = [];
     public $certifications = [];
-    public ?int $flippedCertId = null;
     public $technologies = [];
     public $darkMode = false;
     public $showLogin = false;
@@ -37,11 +36,6 @@ new class extends Component
     private function loadCertifications()
     {
         $this->certifications = Certification::active()->ordered()->get()->toArray();
-    }
-
-    public function flipCert(int $id): void
-    {
-        $this->flippedCertId = $this->flippedCertId === $id ? null : $id;
     }
 
 
@@ -699,14 +693,15 @@ new class extends Component
                         <div class="w-16 h-1 bg-white/60 mx-auto rounded-full"></div>
                     </div>
 
+                    <div x-data="{ flippedId: null }" class="flex-1 flex flex-col">
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 flex-1">
                         @foreach ($certifications as $cert)
-                            @php $isFlipped = $flippedCertId === $cert['id']; @endphp
                             <button type="button"
-                                    wire:click="flipCert({{ $cert['id'] }})"
-                                    aria-expanded="{{ $isFlipped ? 'true' : 'false' }}"
-                                    aria-label="Certification: {{ $cert['name'] }}. Click to {{ $isFlipped ? 'hide' : 'show' }} description."
-                                    class="cert-card text-left rounded-lg transition-transform duration-300 hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-white/60 {{ $isFlipped ? 'is-flipped' : '' }}"
+                                    @click="flippedId = flippedId === {{ $cert['id'] }} ? null : {{ $cert['id'] }}"
+                                    :aria-expanded="flippedId === {{ $cert['id'] }} ? 'true' : 'false'"
+                                    aria-label="Certification: {{ $cert['name'] }}. Click to flip."
+                                    class="cert-card text-left rounded-lg transition-transform duration-300 hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-white/60"
+                                    :class="flippedId === {{ $cert['id'] }} ? 'is-flipped' : ''"
                                     style="height: 220px;">
                                 <div class="cert-card-inner">
                                     <!-- Front face -->
@@ -755,12 +750,9 @@ new class extends Component
                         @endforeach
                     </div>
 
-                    <div aria-live="polite" class="sr-only">
-                        @if ($flippedCertId)
-                            Card flipped to show description.
-                        @else
-                            All cards showing front.
-                        @endif
+                    <div aria-live="polite" class="sr-only"
+                         x-text="flippedId ? 'Card flipped to show description.' : 'All cards showing front.'">
+                    </div>
                     </div>
                 </div>
             </div>
