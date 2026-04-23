@@ -710,3 +710,58 @@ html:not(.dark) .splash-cta button:hover {
   .tile-enter-hidden { opacity: 1; pointer-events: auto; }
   .tile-enter-hero, .tile-enter-side, .tile-enter-bottom-1, .tile-enter-bottom-2, .tile-enter-stretch { animation: none; opacity: 1; }
 }
+
+/* Certification flip cards */
+.cert-card {
+    perspective: 1000px;
+    transform-style: preserve-3d;
+    position: relative;
+}
+
+.cert-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+}
+
+.cert-card.is-flipped .cert-card-inner {
+    transform: rotateY(180deg);
+}
+
+.cert-card-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 0.5rem;
+}
+
+.cert-card-face--back {
+    transform: rotateY(180deg);
+    background-color: var(--cert-card-bg);
+    border: 1px solid var(--cert-card-border);
+}
+
+/* Light-mode contrast bump for the frosted cards */
+html:not(.dark) .cert-card {
+    background-color: var(--cert-card-bg-light) !important;
+    color: #1a1a2e;
+}
+
+html:not(.dark) .cert-card-face--back {
+    background-color: var(--cert-card-bg-light);
+    color: #1a1a2e;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .cert-card-inner {
+        transition: none;
+    }
+}
