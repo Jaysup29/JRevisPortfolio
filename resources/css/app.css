@@ -5,15 +5,18 @@
 @tailwind utilities;
 
 :root {
-    /* Certifications tile — dark mode palette (default) */
-    --cert-tile-bg: #4c3b9c;
-    --cert-card-bg: rgba(255, 255, 255, 0.10);
-    --cert-card-border: rgba(255, 255, 255, 0.25);
+    /* Certifications tile — same pattern as Projects / Let's Connect:
+       saturated tile in both modes, darker translucent cards, white text.
+       Light mode default uses portfolio-purple #6c5ce7; dark mode maps
+       to Tailwind purple-600 #9333ea-ish via the html.dark override below. */
+    --cert-tile-bg: #6c5ce7;
+    --cert-card-bg: rgba(0, 0, 0, 0.25);                   /* darker translucent overlay */
+    --cert-card-border: rgba(255, 255, 255, 0.15);
     --cert-card-text: #ffffff;
     --cert-card-text-muted: rgba(255, 255, 255, 0.80);
     --cert-card-text-subtle: rgba(255, 255, 255, 0.60);
-    --cert-card-inner-bg: rgba(255, 255, 255, 0.10);
-    --cert-card-pill-bg: rgba(255, 255, 255, 0.15);
+    --cert-card-inner-bg: rgba(0, 0, 0, 0.20);
+    --cert-card-pill-bg: rgba(0, 0, 0, 0.30);
     --cert-card-divider: rgba(255, 255, 255, 0.20);
     --cert-title: #ffffff;
     --cert-title-underline: rgba(255, 255, 255, 0.60);
@@ -27,19 +30,12 @@
     --tile-certs-min-h: 280px;
 }
 
-/* Certifications tile — light mode palette */
-html:not(.dark) {
-    --cert-tile-bg: #7c3aed;                               /* lighter violet for energy */
-    --cert-card-bg: rgba(255, 255, 255, 0.95);             /* near-solid white cards */
-    --cert-card-border: rgba(255, 255, 255, 0.95);
-    --cert-card-text: #1a1a2e;                             /* dark navy text */
-    --cert-card-text-muted: rgba(26, 26, 46, 0.80);
-    --cert-card-text-subtle: rgba(26, 26, 46, 0.60);
-    --cert-card-inner-bg: rgba(124, 58, 237, 0.12);        /* soft violet for icon frame / accents */
-    --cert-card-pill-bg: rgba(124, 58, 237, 0.15);
-    --cert-card-divider: rgba(26, 26, 46, 0.20);
-    --cert-title: #ffffff;                                  /* title stays white — tile is purple */
-    --cert-title-underline: rgba(255, 255, 255, 0.80);
+/* Certifications — dark mode just swaps the tile hue (same pattern as
+   bg-portfolio-* → dark:bg-*-600 the other tiles use). Everything else
+   stays identical because the cards already read well as "darker overlay +
+   white text" on any saturated purple. */
+html.dark {
+    --cert-tile-bg: #7c3aed;                               /* Tailwind violet-600 */
 }
 
 [x-cloak] {
